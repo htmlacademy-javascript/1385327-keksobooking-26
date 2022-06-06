@@ -123,14 +123,52 @@ const getNewArray = (elements) => {
   }
   return newArray;
 };
+/*
+const fillArrayAvatar = (a, b, c) => {
+  const arrayNew = [];
+  for (let i = a; i <= b; ++i) {
+    arrayNew.push(`img/avatars/user${i < 10 ? c +i: i}.png`);
+  }
+  return arrayNew;
+};
 
-// const getSrcAvatar = () => {};
+const arrayAvatar = fillArrayAvatar(AUTHOR_AVATAR.from, AUTHOR_AVATAR.to, AUTHOR_AVATAR.prefix);
+let avatarPull = [];
+
+const getAvatar = () => {
+  if (!avatarPull.length) {
+    avatarPull = arrayAvatar;
+  }
+  const src = getRandomArrayElement(avatarPull);
+  const index = avatarPull.indexOf(src);
+  avatarPull.splice(index, 1);
+  return src;
+};
+*/
+const fillArrayAvatar = (a, b, c) => {
+  const arrayNew = [];
+  for (let i = a; i <= b; ++i) {
+    arrayNew.push(`img/avatars/user${i < 10 ? c +i: i}.png`);
+  }
+  return arrayNew;
+};
+
+let avatarPull = [];
+
+const getAvatar = (a, b, c) => {
+  if (!avatarPull.length) {
+    avatarPull = fillArrayAvatar(a, b, c);
+  }
+  const src = getRandomArrayElement(avatarPull);
+  const index = avatarPull.indexOf(src);
+  avatarPull.splice(index, 1);
+  return src;
+};
 
 const createObject = () => {
   const newObject = {
     author: {
-      avatar: getRandomPositiveInteger(AUTHOR_AVATAR.from, AUTHOR_AVATAR.to),
-      //avatar: getSrcAvatar(),
+      avatar: getAvatar(AUTHOR_AVATAR.from, AUTHOR_AVATAR.to, AUTHOR_AVATAR.prefix),
     },
     offer: {
       title:getRandomArrayElement(OBJECT_TITLE),
