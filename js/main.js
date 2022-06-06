@@ -1,43 +1,12 @@
+// 'use strict';
 /*
-для решения домашней работы использована информация:
-https://learn.javascript.ru/number#okruglenie - тип данных числа
-https://habr.com/ru/post/657625/ способ №9 - 10 способов поменять местами два значения в JavaScript
-*/
-
-/*
-Функция, возвращающая случайное целое число из переданного диапазона включительно.
-Диапазон может быть только положительный, включая ноль.
-Придумайте, как функция должна вести себя, если передать значение «до» меньшее, чем значение «от», или равное ему.
-Функция может не гарантировать верный результат, если в переданном диапазоне нет ни одного подходящего числа.
-*/
-
 function getNumber(num1, num2) {
   if (Math.abs(+num1) > Math.abs(+num2)) {
     [num1, num2] = [num2, num1];
   }
   return Math.floor((Math.random()*(Math.abs(+num2)-Math.abs(+num1)+1))+Math.abs(+num1));
 }
-
 getNumber();
-// console.log(getNumber(0.00009, 1.00001)); //может выдать 0
-
-/*
-Функция, возвращающая случайное число с плавающей точкой из переданного диапазона включительно.
-Диапазон может быть только положительный, включая ноль.
-Придумайте, как функция должна вести себя, если передать значение «до» меньшее, чем значение «от», или равное ему.
-Не забудьте, что в случае с дробными числами диапазон может быть в десятых, сотых, тысячных и т. д. долях.
-Например, 1.1, 1.2 — корректный диапазон.
-Функция может не гарантировать верный результат, если в переданном диапазоне нет ни одного подходящего числа.
-*/
-
-// функция getNumber является частным случаем для getRandomNumber без указания 3го параметра, с пустой строкой или указанным 0.
-// убрали +1 так как выходит за верхний диапазон (другой принцип округления)
-// положительный диапазон Math.abs()
-// пустая строка = 0
-// если 'от' больше чем 'до' => меняем местами
-// если 'от' = 'до' считаем что норм (пока не понятно как это повлияет на то что будем делать потом...)
-// в интернете говорят... что для gps координат 5 знаков после точки более чем достаточно)
-// 6 цифр находится в сантиметровом диапазоне, и обычно Наиболее точным, что имеет смысл для устройства GPS
 
 function getRandomNumber(fromNumber, toNumber, floatNumber,) {
   if (Math.abs(+fromNumber) > Math.abs(+toNumber)) {
@@ -45,24 +14,184 @@ function getRandomNumber(fromNumber, toNumber, floatNumber,) {
   }
   return +((Math.random()*(Math.abs(+toNumber)-Math.abs(+fromNumber)))+Math.abs(+fromNumber)).toFixed(Math.abs(+floatNumber));
 }
-
 getRandomNumber();
-// Проверки
-// console.log(getRandomNumber(0, 100, 0));
-// console.log(getRandomNumber(0, 100, 5));
-// console.log(getRandomNumber(0, 100));
+*/
 
-// console.log(getRandomNumber(1.4, 5.458, 1));
-// console.log(getRandomNumber(0.04, 0.458, 5));
-// console.log(getRandomNumber(5.04, -5.04));
+const NEARBY_COUNT = 10;
 
-// может выдать 0 (Наиболее часто встречающаяся ошибка при работе с числами в JavaScript – это потеря точности.)
-// console.log(getRandomNumber(0.00009, 1.00001));
+const AUTHOR_AVATAR = {
+  from: 1,
+  to: 10,
+  prefix: '0'
+};
+const OBJECT_TITLE = [
+  'заголовок 1',
+  'заголовок 2',
+  'заголовок 3',
+  'заголовок 4'
+];
+const OBJECT_PRICE = {
+  from: 0,
+  to: 100500,
+};
+const OBJECT_TYPE = [
+  'palace',
+  'float',
+  'house',
+  'bungalow',
+  'hotel'
+];
+const OBJECT_ROOMS = {
+  from: 0,
+  to: 105,
+};
+const OBJECT_GUESTS = {
+  from: 0,
+  to: 105,
+};
+const OBJECT_CHECKIN = [
+  '12:00',
+  '13:00',
+  '14:00'
+];
+const OBJECT_CHECKOUT = [
+  '12:00',
+  '13:00',
+  '14:00'
+];
+const OBJECT_FEATURES = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner'
+];
+const OBJECT_DESCRIPTION = [
+  'описание 1',
+  'описание 2',
+  'описание 3',
+  'описание 4',
+  'описание 5'
+];
+const OBJECT_PHOTOS = [
+  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
+  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
+  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
+];
+const OBJECT_COORDINATES = {
+  lat: {
+    from: 35.65000,
+    to: 35.70000,
+    digits: 5
+  },
+  lng: {
+    from: 139.7000,
+    to: 139.8000,
+    digits: 5
+  }
+};
 
-// console.log(getRandomNumber(10.4, -5.458, 2));
-// console.log(getRandomNumber('1.4', -5.458, ''));
-// console.log(getRandomNumber('', -58, 1));
-// console.log(getRandomNumber(NaN, -58, 1)); // NaN
-// console.log(getRandomNumber(Infinity, -58, 1)); // infinity
-// console.log(getRandomNumber('', -58, NaN)); // идет как 0
-// console.log(getRandomNumber('', -58, Infinity)); // а тут краш
+const getRandomPositiveInteger = (a, b) => {
+  const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
+  const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
+  const result = Math.random() * (upper - lower + 1) + lower;
+  return Math.floor(result);
+};
+
+const getRandomPositiveFloat = (a, b, digits = 1) => {
+  const lower = Math.min(Math.abs(a), Math.abs(b));
+  const upper = Math.max(Math.abs(a), Math.abs(b));
+  const result = Math.random() * (upper - lower) + lower;
+  return +result.toFixed(digits);
+};
+
+const getRandomArrayElement = (elements) => {
+  const element = elements[getRandomPositiveInteger(0, elements.length - 1)];
+  return element;
+};
+
+const getNewArray = (elements) => {
+  const newArray = [];
+  const newArrayLength = getRandomPositiveInteger(1, elements.length);
+  while(newArray.length < newArrayLength) {
+    const index = getRandomPositiveInteger(0, elements.length-1);
+    const element = elements[index];
+    if (!newArray.includes(element)) {
+      newArray.push(element);
+    }
+  }
+  return newArray;
+};
+/*
+const fillArrayAvatar = (a, b, c) => {
+  const arrayNew = [];
+  for (let i = a; i <= b; ++i) {
+    arrayNew.push(`img/avatars/user${i < 10 ? c +i: i}.png`);
+  }
+  return arrayNew;
+};
+
+const arrayAvatar = fillArrayAvatar(AUTHOR_AVATAR.from, AUTHOR_AVATAR.to, AUTHOR_AVATAR.prefix);
+let avatarPull = [];
+
+const getAvatar = () => {
+  if (!avatarPull.length) {
+    avatarPull = arrayAvatar;
+  }
+  const src = getRandomArrayElement(avatarPull);
+  const index = avatarPull.indexOf(src);
+  avatarPull.splice(index, 1);
+  return src;
+};
+*/
+const fillArrayAvatar = (a, b, c) => {
+  const arrayNew = [];
+  for (let i = a; i <= b; ++i) {
+    arrayNew.push(`img/avatars/user${i < 10 ? c +i: i}.png`);
+  }
+  return arrayNew;
+};
+
+let avatarPull = [];
+
+const getAvatar = (a, b, c) => {
+  if (!avatarPull.length) {
+    avatarPull = fillArrayAvatar(a, b, c);
+  }
+  const src = getRandomArrayElement(avatarPull);
+  const index = avatarPull.indexOf(src);
+  avatarPull.splice(index, 1);
+  return src;
+};
+
+const createObject = () => {
+  const newObject = {
+    author: {
+      avatar: getAvatar(AUTHOR_AVATAR.from, AUTHOR_AVATAR.to, AUTHOR_AVATAR.prefix),
+    },
+    offer: {
+      title:getRandomArrayElement(OBJECT_TITLE),
+      address: '',
+      price: getRandomPositiveInteger(OBJECT_PRICE.from, OBJECT_PRICE.to),
+      type: getRandomArrayElement(OBJECT_TYPE),
+      rooms: getRandomPositiveInteger(OBJECT_ROOMS.from, OBJECT_ROOMS.to),
+      guests: getRandomPositiveInteger(OBJECT_GUESTS.from, OBJECT_GUESTS.to),
+      checkin: getRandomArrayElement(OBJECT_CHECKIN),
+      checkout: getRandomArrayElement(OBJECT_CHECKOUT),
+      features: getNewArray(OBJECT_FEATURES),
+      description: getRandomArrayElement(OBJECT_DESCRIPTION),
+      photos: getNewArray(OBJECT_PHOTOS),
+    },
+    location: {
+      lat: getRandomPositiveFloat(OBJECT_COORDINATES.lat.from, OBJECT_COORDINATES.lat.to, OBJECT_COORDINATES.lat.digits),
+      lng: getRandomPositiveFloat(OBJECT_COORDINATES.lng.from, OBJECT_COORDINATES.lng.to, OBJECT_COORDINATES.lng.digits),
+    }
+  };
+  newObject.offer.address = `${newObject.location.lat}, ${newObject.location.lng}`;
+  return newObject;
+};
+
+const nearbyObject = Array.from({length: NEARBY_COUNT}, createObject);
+//console.log(nearbyObject);
+Object.entries(nearbyObject);
