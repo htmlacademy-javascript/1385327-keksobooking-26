@@ -110,6 +110,6 @@ const createObject = () => {
   return newObject;
 };
 
-const nearbyObject = () => Array.from({length: NEARBY_COUNT}, createObject);
+const getNearbyObject = () => Array.from({length: NEARBY_COUNT}, createObject);
 
-export {nearbyObject};
+export {getNearbyObject};

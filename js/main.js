@@ -1,3 +1,3 @@
-import {nearbyObject} from './data.js';
-// console.log(nearbyObject());
-nearbyObject();
+import {getNearbyObject} from './data.js';
+// console.log(getNearbyObject());
+getNearbyObject();
