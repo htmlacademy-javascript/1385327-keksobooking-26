@@ -1,3 +1,4 @@
-import {getNearbyObject} from './data.js';
+//import {getNearbyObject} from './data.js';
 // console.log(getNearbyObject());
-getNearbyObject();
+//getNearbyObject();
+import './create-obgect.js';
