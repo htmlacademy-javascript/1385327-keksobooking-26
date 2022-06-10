@@ -54,7 +54,7 @@ const setElement = (popup, classElement, content) => {
   popup.querySelector(classElement).textContent = content;
 };
 
-const hiddenElement = (element) => {
+const hideElement = (element) => {
   element.classList.add('hidden');
 };
 
@@ -79,6 +79,6 @@ export {
   getNewArray,
   getAvatar,
   setElement,
-  hiddenElement,
+  hideElement,
   endingWord
 };
