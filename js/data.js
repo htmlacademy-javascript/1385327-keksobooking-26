@@ -6,7 +6,7 @@ import {
   getAvatar
 } from './util.js';
 
-const NEARBY_COUNT = 10;
+//const NEARBY_COUNT = 10;
 
 const AUTHOR_AVATAR = {
   from: 1,
@@ -110,6 +110,5 @@ const createObject = () => {
   return newObject;
 };
 
-const getNearbyObject = () => Array.from({length: NEARBY_COUNT}, createObject);
-
+const getNearbyObject = (count) => Array.from({length: count}, createObject);
 export {getNearbyObject};
