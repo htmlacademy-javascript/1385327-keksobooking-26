@@ -5,7 +5,8 @@ const mapCanvas = document.querySelector('#map-canvas');
 
 const template = document.querySelector('#card').content.querySelector('.popup');
 
-const nearbyObject = getNearbyObject(1);
+const nearbyObject = getNearbyObject(10);
+const elements = [];
 
 nearbyObject.forEach(({offer, author}) => {
   const element = template.cloneNode(true);
@@ -89,5 +90,9 @@ nearbyObject.forEach(({offer, author}) => {
     hideElement(element.querySelector('.popup__avatar'));
   }
 
-  mapCanvas.append(element);
+  elements.push(element);
+
 });
+
+//mapCanvas.append(elements[0]);
+export {elements, mapCanvas};

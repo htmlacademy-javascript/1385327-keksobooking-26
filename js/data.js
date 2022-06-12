@@ -6,8 +6,6 @@ import {
   getAvatar
 } from './util.js';
 
-//const NEARBY_COUNT = 10;
-
 const AUTHOR_AVATAR = {
   from: 1,
   to: 10,
@@ -82,6 +80,8 @@ const OBJECT_COORDINATES = {
     digits: 5
   }
 };
+
+//const NEARBY_COUNT = 10;
 
 const createObject = () => {
   const newObject = {
