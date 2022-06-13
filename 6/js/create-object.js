@@ -94,5 +94,4 @@ nearbyObject.forEach(({offer, author}) => {
 
 });
 
-//mapCanvas.append(elements[0]);
-export {elements, mapCanvas};
+mapCanvas.append(elements[0]);

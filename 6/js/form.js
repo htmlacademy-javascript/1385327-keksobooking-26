@@ -1,4 +1,4 @@
-import {elements, mapCanvas} from './create-object.js';
+
 const adForm = document.querySelector('.ad-form');
 const mapFilters = document.querySelector('.map__filters');
 
@@ -27,7 +27,6 @@ const pageEnable = () => {
     mapFilters.children[i].disabled = false;
   }
 
-  mapCanvas.append(elements[0]);
 };
 
 export {pageDisabled, pageEnable};
