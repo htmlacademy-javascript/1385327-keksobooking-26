@@ -40,13 +40,13 @@ const getErrorTitleMessage = (value) => {
   } else if (value.length >= TITLE_SIZE.max) {
     return `Максимальная длина ${TITLE_SIZE.max} символов`;
   } else {
-    return 'Это поле обязательно для заполнения'; // required
+    return 'Это поле обязательно для заполнения';
   }
 };
 pristine.addValidator(titleField, validateTitle, getErrorTitleMessage);
 
 addressField.value = `${TOKYO_DOWNTOWN.lat} ${TOKYO_DOWNTOWN.lng}`; // Координаты центра Токио по умолчанию (и чтоб не ругался)
-// ---------------------------------------------------------------------------------------------------------------------------------------------------
+
 const setForType = () => {
   switch (typeField.value) {
     case 'bungalow' : priceField.placeholder = 0; break;
@@ -58,33 +58,38 @@ const setForType = () => {
 };
 setForType();
 
-const validatePrice = () => typePrice.maxPrice.value >= priceField.value >= typePrice[typeField.value];
+const validatePrice = () => Number(priceField.value) >= typePrice[typeField.value] && typePrice.maxPrice >= Number(priceField.value);
 const getErrorPriceMessage = () => {
-  if (priceField.value < typePrice[typeField.value]) {
+  if (Number(priceField.value) < typePrice[typeField.value]) {
     return `Минимальная цена должна быть больше ${typePrice[typeField.value]}`;
-  } else if (priceField.value > typePrice.maxPrice) {
+  } else if (Number(priceField.value) > typePrice.maxPrice) {
     return `Стоимость не должна превышать ${typePrice.maxPrice}`;
   }
 };
 pristine.addValidator(priceField, validatePrice, getErrorPriceMessage);
+
 const onTypeChange = () => {
   setForType();
   pristine.validate(priceField);
 };
-
 typeField.addEventListener('change', onTypeChange);
-// ---------------------------------------------------------------------------------------------------------------------------------------------------
-const validateRoomsAndGuests = () => guestsField.value <= roomsField.value && roomsField.value !== 100 && guestsField.value !== 0 || roomsField.value === 100 && guestsField.value === 0;
+priceField.addEventListener('change', onTypeChange);
+
+const validateRoomsAndGuests = () => (Number(guestsField.value) <= Number(roomsField.value) && Number(roomsField.value) !== 100 && Number(guestsField.value) !== 0) || (Number(roomsField.value) === 100 && Number(guestsField.value) === 0);
 
 const getErrorRoomsMessage = () => {
-  if (roomsField.value < guestsField.value) {
+  if (Number(roomsField.value) < Number(guestsField.value)) {
     return 'Количество гостей не должно превышать количество комнат';
+  }else if(Number(roomsField.value) !== 100 && Number(guestsField.value) === 0) {
+    return 'не для гостей выбирайте 100 комнат';
   }
 };
 
 const getErrorGuestsMessage = () => {
-  if (guestsField.value > roomsField.value) {
+  if (Number(guestsField.value) > Number(roomsField.value)) {
     return 'Количество комнат не может быть меньше количества гостей';
+  } else if(Number(roomsField.value) === 100 && Number(guestsField.value) !== 0) {
+    return '100 комнат это не для гостей';
   }
 };
 pristine.addValidator(guestsField, validateRoomsAndGuests, getErrorRoomsMessage);
@@ -101,10 +106,11 @@ const onGuestsChange = () => {
   pristine.validate(roomsField);
 };
 guestsField.addEventListener('change', onGuestsChange);
-// ---------------------------------------------------------------------------------------------------------------------------------------------------
+
 form.addEventListener('submit', (evt) => {
   if(pristine.validate()) {
+    //evt.preventDefault();
     return true;
   }
-  evt.preventDefault(); console.log('ohhhhh');
+  evt.preventDefault();
 });
