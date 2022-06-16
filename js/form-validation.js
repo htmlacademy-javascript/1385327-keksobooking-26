@@ -1,26 +1,28 @@
 const form = document.querySelector('.ad-form');
 const titleField = form.querySelector('#title');
+const addressField = form.querySelector('#address');
+const typeField = form.querySelector('#type');
 const priceField = form.querySelector('#price');
 const roomsField = form.querySelector('#room_number');
-const room = roomsField.options[roomsField.selectedIndex].value;
 const guestsField = form.querySelector('#capacity');
-const guest = guestsField.options[guestsField.selectedIndex].value;
-const typeField = form.querySelector('#type');
 
 //const enableValidator = () => {};
 const TITLE_SIZE = {
   min: 30,
   max: 100
 };
+const TOKYO_DOWNTOWN = {
+  lat: 35.6895,
+  lng: 139.692
+};
 const typePrice = {
-  flat: 1000,
   bungalow: 0,
+  flat: 1000,
+  hotel: 3000,
   house: 5000,
   palace: 10000,
-  hotel: 3000
+  maxPrice: 100000
 };
-// const ROOM_NUMBERS = [1, 2, 3, 100];
-// const CAPACITY = [1, 2, 3, 'не для гостей'];
 
 const pristine =  new Pristine(form, {
   classTo: 'ad-form__element',
@@ -31,58 +33,78 @@ const pristine =  new Pristine(form, {
   errorTextClass: 'ad-form__error-text'
 });
 
+const validateTitle =  (value) => value.length >= TITLE_SIZE.min && value.length <= TITLE_SIZE.max;
+const getErrorTitleMessage = (value) => {
+  if (value.length <= TITLE_SIZE.min) {
+    return `Минимальная длина ${TITLE_SIZE.min} символов`;
+  } else if (value.length >= TITLE_SIZE.max) {
+    return `Максимальная длина ${TITLE_SIZE.max} символов`;
+  } else {
+    return 'Это поле обязательно для заполнения'; // required
+  }
+};
+pristine.addValidator(titleField, validateTitle, getErrorTitleMessage);
 
-pristine.addValidator(
-  titleField,
-  (value) => value.length >= TITLE_SIZE.min && value.length <= TITLE_SIZE.max,
-  `От ${TITLE_SIZE.min} до ${TITLE_SIZE.max} символов`
-);
+addressField.value = `${TOKYO_DOWNTOWN.lat} ${TOKYO_DOWNTOWN.lng}`; // Координаты центра Токио по умолчанию (и чтоб не ругался)
+// ---------------------------------------------------------------------------------------------------------------------------------------------------
+const setForType = () => {
+  switch (typeField.value) {
+    case 'bungalow' : priceField.placeholder = 0; break;
+    case 'flat' : priceField.placeholder = 1000; break;
+    case 'hotel' : priceField.placeholder = 3000; break;
+    case 'house' : priceField.placeholder = 5000; break;
+    case 'palace' : priceField.placeholder = 10000;
+  }
+};
+setForType();
 
-const validatePrice = () => priceField.value >= typePrice[typeField.value];
-const getErrorPriceMessage = () => `Минимальная цена должна быть больше ${typePrice[typeField.value]}`;
-//const validateRoomsAndGuests = () => Number(guestsField.value) <= Number(roomsField.value) && Number(roomsField.value) !== 100 && Number(guestsField.value) !== 0 || Number(roomsField.value) === 100 && Number(guestsField.value) === 0;
-const validateRoomsAndGuests = () => Number(guest) <= Number(room) && Number(room) !== 100 && Number(guest) !== 0 || Number(room) === 100 && Number(guest) === 0;
+const validatePrice = () => typePrice.maxPrice.value >= priceField.value >= typePrice[typeField.value];
+const getErrorPriceMessage = () => {
+  if (priceField.value < typePrice[typeField.value]) {
+    return `Минимальная цена должна быть больше ${typePrice[typeField.value]}`;
+  } else if (priceField.value > typePrice.maxPrice) {
+    return `Стоимость не должна превышать ${typePrice.maxPrice}`;
+  }
+};
 pristine.addValidator(priceField, validatePrice, getErrorPriceMessage);
-pristine.addValidator(guestsField, validateRoomsAndGuests, 'Количество гостей не должно превышать количество комнат');
-pristine.addValidator(roomsField, validateRoomsAndGuests, 'Количество гостей не должно превышать количество комнат');
+const onTypeChange = () => {
+  setForType();
+  pristine.validate(priceField);
+};
 
+typeField.addEventListener('change', onTypeChange);
+// ---------------------------------------------------------------------------------------------------------------------------------------------------
+const validateRoomsAndGuests = () => guestsField.value <= roomsField.value && roomsField.value !== 100 && guestsField.value !== 0 || roomsField.value === 100 && guestsField.value === 0;
+
+const getErrorRoomsMessage = () => {
+  if (roomsField.value < guestsField.value) {
+    return 'Количество гостей не должно превышать количество комнат';
+  }
+};
+
+const getErrorGuestsMessage = () => {
+  if (guestsField.value > roomsField.value) {
+    return 'Количество комнат не может быть меньше количества гостей';
+  }
+};
+pristine.addValidator(guestsField, validateRoomsAndGuests, getErrorRoomsMessage);
+pristine.addValidator(roomsField, validateRoomsAndGuests, getErrorGuestsMessage);
+
+const onRoomsChange = () => {
+  pristine.validate(roomsField);
+  pristine.validate(guestsField);
+};
+roomsField.addEventListener('change',  onRoomsChange);
+
+const onGuestsChange = () => {
+  pristine.validate(guestsField);
+  pristine.validate(roomsField);
+};
+guestsField.addEventListener('change', onGuestsChange);
+// ---------------------------------------------------------------------------------------------------------------------------------------------------
 form.addEventListener('submit', (evt) => {
   if(pristine.validate()) {
     return true;
   }
-  evt.preventDefault();
+  evt.preventDefault(); console.log('ohhhhh');
 });
-// pristine.addValidator(
-//   priceField,
-//   (value) => value >= PRICE_SIZE.min && value <= PRICE_SIZE.max,
-//   `От ${PRICE_SIZE.min} до ${PRICE_SIZE.max} рублей`
-// );
-
-// pristine.addValidator(
-//   guestsField,  roomsField,
-//   (Number(room) === 100 && Number(guest) === 0) || (Number(guest) <= Number(room) && Number(room) !== 100 && Number(guest) !== 0),
-//   `Число гостей ${room} не должно превышать числа комнат`
-// );
-
-// pristine.addValidator(
-//   guestsField,
-//   (Number(roomsField.value) === 100 && Number(guestsField.value) === 0) ||
-//   (Number(guestsField.value) <= Number(roomsField.value) &&
-//   Number(roomsField.value) !== 100 &&
-//   Number(guestsField.value) !== 0),
-//   `555777333`
-// );
-
-// form.addEventListener('submit', (evt) => {
-//   evt.preventDefault();
-//   pristine.validate();
-// });
-
-// var pristine = new Pristine(document.getElementById("form1"));
-// var elem = document.getElementById("email");
-// pristine.addValidator(elem, function(value) {if (value.length && value[0] === value[0].toUpperCase()){return true;}return false;
-// }, "The first character must be capitalized", 2, false);
-
-// Pristine.addValidator("my-range", function(value, param1, param2) {
-//   return parseInt(param1) <= value && value <= parseInt(param2)
-// }, "The value (${0}) must be between ${1} and ${2}", 5, false);
