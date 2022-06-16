@@ -49,11 +49,11 @@ addressField.value = `${TOKYO_DOWNTOWN.lat} ${TOKYO_DOWNTOWN.lng}`; // Коор�
 
 const setForType = () => {
   switch (typeField.value) {
-    case 'bungalow' : priceField.placeholder = 0; break;
-    case 'flat' : priceField.placeholder = 1000; break;
-    case 'hotel' : priceField.placeholder = 3000; break;
-    case 'house' : priceField.placeholder = 5000; break;
-    case 'palace' : priceField.placeholder = 10000;
+    case 'bungalow' : {priceField.placeholder = 0; break;}
+    case 'flat' : {priceField.placeholder = 1000; break;}
+    case 'hotel' : {priceField.placeholder = 3000; break;}
+    case 'house' : {priceField.placeholder = 5000; break;}
+    case 'palace' : {priceField.placeholder = 10000;}
   }
 };
 setForType();
