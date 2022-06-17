@@ -5,6 +5,8 @@ const typeField = form.querySelector('#type');
 const priceField = form.querySelector('#price');
 const roomsField = form.querySelector('#room_number');
 const guestsField = form.querySelector('#capacity');
+const checkinField = form.querySelector('#timein');
+const checkoutField = form.querySelector('#timeout');
 
 //const enableValidator = () => {};
 const TITLE_SIZE = {
@@ -39,8 +41,6 @@ const getErrorTitleMessage = (value) => {
     return `Минимальная длина ${TITLE_SIZE.min} символов`;
   } else if (value.length >= TITLE_SIZE.max) {
     return `Максимальная длина ${TITLE_SIZE.max} символов`;
-  } else {
-    return 'Это поле обязательно для заполнения';
   }
 };
 pristine.addValidator(titleField, validateTitle, getErrorTitleMessage);
@@ -49,11 +49,11 @@ addressField.value = `${TOKYO_DOWNTOWN.lat} ${TOKYO_DOWNTOWN.lng}`; // Коор�
 
 const setForType = () => {
   switch (typeField.value) {
-    case 'bungalow' : {priceField.placeholder = 0; break;}
-    case 'flat' : {priceField.placeholder = 1000; break;}
-    case 'hotel' : {priceField.placeholder = 3000; break;}
-    case 'house' : {priceField.placeholder = 5000; break;}
-    case 'palace' : {priceField.placeholder = 10000;}
+    case 'bungalow' : {priceField.placeholder = typePrice.bungalow; break;} // 0
+    case 'flat' : {priceField.placeholder = typePrice.flat; break;} // 1000
+    case 'hotel' : {priceField.placeholder = typePrice.hotel; break;} // 3000
+    case 'house' : {priceField.placeholder = typePrice.house; break;} // 5000
+    case 'palace' : {priceField.placeholder = typePrice.palace;} // 10000
   }
 };
 setForType();
@@ -106,10 +106,23 @@ const onGuestsChange = () => {
   pristine.validate(roomsField);
 };
 guestsField.addEventListener('change', onGuestsChange);
-
+// ------------------------------------------------------------------------------------------------------------
+const onCheckinChange = () => {
+  if (checkinField.value !== checkoutField.value) {
+    checkoutField.value = checkinField.value;
+  }
+};
+const onCheckoutChange = () => {
+  if (checkinField.value !== checkoutField.value) {
+    checkinField.value = checkoutField.value;
+  }
+};
+checkinField.addEventListener('change', onCheckinChange);
+checkoutField.addEventListener('change', onCheckoutChange);
+// ------------------------------------------------------------------------------------------------------------
 form.addEventListener('submit', (evt) => {
   if(pristine.validate()) {
-    //evt.preventDefault();
+    //evt.preventDefault(); console.log('true');
     return true;
   }
   evt.preventDefault();
