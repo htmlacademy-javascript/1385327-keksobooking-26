@@ -1,7 +1,7 @@
 import {getNearbyObject} from './data.js';
 import {setElement, hideElement, endingWord} from './util.js';
 
-const mapCanvas = document.querySelector('#map-canvas');
+//const mapCanvas = document.querySelector('#map-canvas');
 
 const template = document.querySelector('#card').content.querySelector('.popup');
 
@@ -94,4 +94,4 @@ nearbyObject.forEach(({offer, author}) => {
 
 });
 
-mapCanvas.append(elements[0]);
+export {elements, nearbyObject}; //mapCanvas.append(elements[0]);
