@@ -90,7 +90,7 @@ nearbyObject.forEach(({offer, author}) => {
     hideElement(element.querySelector('.popup__avatar'));
   }
 
-  elements.push(element);
+  elements.push(element); return element;
 
 });
 

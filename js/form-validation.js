@@ -74,7 +74,50 @@ const onTypeChange = () => {
 };
 typeField.addEventListener('change', onTypeChange);
 priceField.addEventListener('change', onTypeChange);
+// ------------------------------------------------------------------------------------------------------------
+const sliderElement = document.querySelector('.ad-form__slider');
+const valueElement = document.querySelector('#price');
+valueElement.value = typePrice[titleField.value];
 
+noUiSlider.create(sliderElement, {
+  range: {
+    min: typePrice.bungalow,
+    max: typePrice.maxPrice,
+  },
+  start: typePrice[typeField.value],
+  step: 1,
+  connect: 'lower',
+  format: {
+    to: function (value) {
+      return value.toFixed(0);
+    },
+    from: function (value) {
+      return parseFloat(value);
+    },
+  },
+});
+
+sliderElement.noUiSlider.on('update', () => { // отслеживание ползунка
+  setForType();
+  valueElement.value = sliderElement.noUiSlider.get(); //Получим актуальное значение слайдера
+  //console.log('polzunok', valueElement.value);
+});
+//console.log(valueElement.value);
+typeField.addEventListener('change', () => {
+  //setForType();
+  valueElement.value = sliderElement.noUiSlider.set(Number(priceField.value));
+  //sliderElement.noUiSlider.reset();
+  //pristine.validate(priceField);
+  sliderElement.noUiSlider.updateOptions({
+    range: {
+      min: typePrice.bungalow,
+      max: typePrice.maxPrice,
+    },
+    start: Number(priceField.value),
+    step: 1,
+  }); //console.log('116', valueElement.value); console.log(typePrice[typeField.value]);
+});
+// ------------------------------------------------------------------------------------------------------------
 const validateRoomsAndGuests = () => (Number(guestsField.value) <= Number(roomsField.value) && Number(roomsField.value) !== 100 && Number(guestsField.value) !== 0) || (Number(roomsField.value) === 100 && Number(guestsField.value) === 0);
 
 const getErrorRoomsMessage = () => {

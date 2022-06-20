@@ -1,5 +1,5 @@
 import {pageDisabled, pageEnable} from './form.js';
-import {elements} from './create-object.js'; //console.log(elements[0]);
+import {elements, nearbyObject} from './create-object.js'; //console.log(nearbyObject); console.log(elements[0]);
 
 const BasicMapSetup = { // императорский Дворец так как попадает в диапазон в отличии от центра
   lat: 35.68563,
@@ -56,30 +56,34 @@ const setMainPin = () => {
 };
 setMainPin();
 //------------------------------------------------------------------------------------------------
-const markerGroup = L.layerGroup().addTo(map);
-
-const setNearbyPin = (element) => {
-  //const {lat, lng} = element;
-  const nearbyMarker = L.marker(
-    {
-      lat: location.lat,
-      lng: location.lng,
-    },
-    {
-      icon: pinIcon,
-    },
-  );
-  nearbyMarker.addTo(markerGroup);
-  nearbyMarker.bindPopup(element);
+const createCustomPopup = (point) => {
+  //const bindElement = 0;
+  const bindElement = elements.findIndex((element) => element.textContent.includes(point));
+  //console.log('index', bindElement);
+  return elements[bindElement];
 };
 
-elements.forEach((element) => {
-  setNearbyPin(element);
+const markerGroup = L.layerGroup().addTo(map);
+nearbyObject.forEach(({location}) => {
+  const setNearbyPin = () => {
+    const point = `${location.lat}, ${location.lng}`;
+    const nearbyMarker = L.marker(
+      {
+        lat: location.lat,
+        lng: location.lng,
+      },
+      {
+        icon: pinIcon,
+      },
+    );
+    nearbyMarker.addTo(markerGroup);
+    nearbyMarker.bindPopup(createCustomPopup(point));
+    //nearbyMarker.bindPopup(elements[0]);
+  };
+  setNearbyPin(map);
 });
 
-//setNearbyPin(map);
-
-
+//------------------------------------------------------------------------------------------------
 // resetButton.addEventListener('click', () => {
 //   mainPinMarker.setLatLng({
 // lat: BasicMapSetup.lat,
