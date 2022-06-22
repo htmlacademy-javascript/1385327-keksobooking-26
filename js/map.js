@@ -1,4 +1,4 @@
-import {pageDisabled, pageEnable} from './form.js';
+import {pageDisabled} from './form.js';
 import {elements, nearbyObject} from './create-object.js'; //console.log(nearbyObject); console.log(elements[0]);
 
 const BasicMapSetup = { // императорский Дворец так как попадает в диапазон в отличии от центра
@@ -20,17 +20,18 @@ const pinIcon = L.icon({
   iconAnchor: [20, 40],
 });
 
-pageDisabled();
+pageDisabled(true);
 //-----------------------------------------------------------------------------------------------------
 const map = L.map('map-canvas')
   .on('load', () => {
-    pageEnable();
+    pageDisabled(false);
     //console.log('Карта инициализирована');
   })
   .setView({
     lat: BasicMapSetup.lat,
     lng: BasicMapSetup.lng,
   }, BasicMapSetup.scale);
+
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
@@ -57,13 +58,12 @@ const setMainPin = () => {
 setMainPin();
 //------------------------------------------------------------------------------------------------
 const createCustomPopup = (point) => {
-  //const bindElement = 0;
   const bindElement = elements.findIndex((element) => element.textContent.includes(point));
-  //console.log('index', bindElement);
   return elements[bindElement];
 };
 
 const markerGroup = L.layerGroup().addTo(map);
+
 nearbyObject.forEach(({location}) => {
   const setNearbyPin = () => {
     const point = `${location.lat}, ${location.lng}`;
@@ -78,21 +78,6 @@ nearbyObject.forEach(({location}) => {
     );
     nearbyMarker.addTo(markerGroup);
     nearbyMarker.bindPopup(createCustomPopup(point));
-    //nearbyMarker.bindPopup(elements[0]);
   };
   setNearbyPin(map);
 });
-
-//------------------------------------------------------------------------------------------------
-// resetButton.addEventListener('click', () => {
-//   mainPinMarker.setLatLng({
-// lat: BasicMapSetup.lat,
-// lng: BasicMapSetup.lng,
-//   });
-
-//   map.setView({
-// lat: BasicMapSetup.lat,
-// lng: BasicMapSetup.lng,
-//   }, BasicMapSetup.scale);
-// });
-//mainPinMarker.remove();

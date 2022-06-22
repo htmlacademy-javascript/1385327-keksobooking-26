@@ -3,12 +3,12 @@ const titleField = form.querySelector('#title');
 const addressField = form.querySelector('#address');
 const typeField = form.querySelector('#type');
 const priceField = form.querySelector('#price');
+const sliderElement = document.querySelector('.ad-form__slider');
 const roomsField = form.querySelector('#room_number');
 const guestsField = form.querySelector('#capacity');
 const checkinField = form.querySelector('#timein');
 const checkoutField = form.querySelector('#timeout');
 
-//const enableValidator = () => {};
 const TITLE_SIZE = {
   min: 30,
   max: 100
@@ -56,7 +56,26 @@ const setForType = () => {
     case 'palace' : {priceField.placeholder = typePrice.palace;} // 10000
   }
 };
+
 setForType();
+
+noUiSlider.create(sliderElement, {
+  range: {
+    min: typePrice.bungalow,
+    max: typePrice.maxPrice,
+  },
+  start: 0,
+  step: 1,
+  connect: 'lower',
+  format: {
+    to: function (value) {
+      return value.toFixed(0);
+    },
+    from: function (value) {
+      return parseFloat(value);
+    },
+  },
+});
 
 const validatePrice = () => Number(priceField.value) >= typePrice[typeField.value] && typePrice.maxPrice >= Number(priceField.value);
 const getErrorPriceMessage = () => {
@@ -72,50 +91,18 @@ const onTypeChange = () => {
   setForType();
   pristine.validate(priceField);
 };
+
+const onPriceChange = () => {
+  sliderElement.noUiSlider.set(Number(priceField.value));
+};
+
 typeField.addEventListener('change', onTypeChange);
-priceField.addEventListener('change', onTypeChange);
-// ------------------------------------------------------------------------------------------------------------
-const sliderElement = document.querySelector('.ad-form__slider');
-const valueElement = document.querySelector('#price');
-valueElement.value = typePrice[titleField.value];
+priceField.addEventListener('change', onPriceChange);
 
-noUiSlider.create(sliderElement, {
-  range: {
-    min: typePrice.bungalow,
-    max: typePrice.maxPrice,
-  },
-  start: typePrice[typeField.value],
-  step: 1,
-  connect: 'lower',
-  format: {
-    to: function (value) {
-      return value.toFixed(0);
-    },
-    from: function (value) {
-      return parseFloat(value);
-    },
-  },
-});
-
-sliderElement.noUiSlider.on('update', () => { // отслеживание ползунка
+sliderElement.noUiSlider.on('slide', () => {
   setForType();
-  valueElement.value = sliderElement.noUiSlider.get(); //Получим актуальное значение слайдера
-  //console.log('polzunok', valueElement.value);
-});
-//console.log(valueElement.value);
-typeField.addEventListener('change', () => {
-  //setForType();
-  valueElement.value = sliderElement.noUiSlider.set(Number(priceField.value));
-  //sliderElement.noUiSlider.reset();
-  //pristine.validate(priceField);
-  sliderElement.noUiSlider.updateOptions({
-    range: {
-      min: typePrice.bungalow,
-      max: typePrice.maxPrice,
-    },
-    start: Number(priceField.value),
-    step: 1,
-  }); //console.log('116', valueElement.value); console.log(typePrice[typeField.value]);
+  priceField.value = sliderElement.noUiSlider.get();
+  pristine.validate(priceField);
 });
 // ------------------------------------------------------------------------------------------------------------
 const validateRoomsAndGuests = () => (Number(guestsField.value) <= Number(roomsField.value) && Number(roomsField.value) !== 100 && Number(guestsField.value) !== 0) || (Number(roomsField.value) === 100 && Number(guestsField.value) === 0);
