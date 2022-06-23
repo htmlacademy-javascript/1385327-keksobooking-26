@@ -1,14 +1,8 @@
-import {getNearbyObject} from './data.js';
 import {setElement, hideElement, endingWord} from './util.js';
-
-//const mapCanvas = document.querySelector('#map-canvas');
 
 const template = document.querySelector('#card').content.querySelector('.popup');
 
-const nearbyObject = getNearbyObject(10);
-const elements = [];
-
-nearbyObject.forEach(({offer, author}) => {
+const getCreateObjects = ({author, offer}) => {
   const element = template.cloneNode(true);
 
   const createElement = (selector, content) => {
@@ -90,8 +84,8 @@ nearbyObject.forEach(({offer, author}) => {
     hideElement(element.querySelector('.popup__avatar'));
   }
 
-  elements.push(element); return element;
+  return element;
 
-});
+};
 
-export {elements, nearbyObject}; //mapCanvas.append(elements[0]);
+export{getCreateObjects};

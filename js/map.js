@@ -1,5 +1,5 @@
 import {pageDisabled} from './form.js';
-import {elements, nearbyObject} from './create-object.js'; //console.log(nearbyObject); console.log(elements[0]);
+import {getCreateObjects} from './create-object.js';
 
 const BasicMapSetup = { // императорский Дворец так как попадает в диапазон в отличии от центра
   lat: 35.68563,
@@ -19,13 +19,10 @@ const pinIcon = L.icon({
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 });
-
 pageDisabled(true);
-//-----------------------------------------------------------------------------------------------------
 const map = L.map('map-canvas')
   .on('load', () => {
-    pageDisabled(false);
-    //console.log('Карта инициализирована');
+    pageDisabled(false); //console.log('Карта инициализирована');
   })
   .setView({
     lat: BasicMapSetup.lat,
@@ -38,7 +35,9 @@ L.tileLayer(
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
 ).addTo(map);
+
 //--------------------------------------------------------------------------------------------------------
+
 const setMainPin = () => {
   const mainPinMarker = L.marker(
     {
@@ -50,34 +49,34 @@ const setMainPin = () => {
       icon: mainPinIcon,
     },
   );
-  mainPinMarker.addTo(map);
-  mainPinMarker.on('moveend', (evt) => {
+  mainPinMarker.addTo(map).on('move', (evt) => {
     document.querySelector('.ad-form').querySelector('#address').value = `${evt.target.getLatLng().lat.toFixed(BasicMapSetup.digits)} ${evt.target.getLatLng().lng.toFixed(BasicMapSetup.digits)}`;
   });
 };
 setMainPin();
+
 //------------------------------------------------------------------------------------------------
-const createCustomPopup = (point) => {
-  const bindElement = elements.findIndex((element) => element.textContent.includes(point));
-  return elements[bindElement];
-};
 
 const markerGroup = L.layerGroup().addTo(map);
 
-nearbyObject.forEach(({location}) => {
-  const setNearbyPin = () => {
-    const point = `${location.lat}, ${location.lng}`;
-    const nearbyMarker = L.marker(
-      {
-        lat: location.lat,
-        lng: location.lng,
-      },
-      {
-        icon: pinIcon,
-      },
-    );
-    nearbyMarker.addTo(markerGroup);
-    nearbyMarker.bindPopup(createCustomPopup(point));
+const createNearbyMarker = ({author, offer, location}) => {
+
+  const createCustomPopup = () => {
+    const element = getCreateObjects({author, offer});
+    return element;
   };
-  setNearbyPin(map);
-});
+
+  const nearbyMarker = L.marker(
+    {
+      lat: location.lat,
+      lng: location.lng,
+    },
+    {
+      icon: pinIcon,
+    },
+  );
+
+  nearbyMarker.addTo(markerGroup).bindPopup(createCustomPopup({author, offer}));
+};
+
+export {createNearbyMarker};

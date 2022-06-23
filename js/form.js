@@ -20,6 +20,7 @@ const pageDisabled = (isDisabled) => {
   mapFilterSelects.forEach((item) => {
     item.disabled = isDisabled;
   });
+  //if (isDisabled) {console.log('true');} else {console.log('folse');}
 };
 
 export {pageDisabled};

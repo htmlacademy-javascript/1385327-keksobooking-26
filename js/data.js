@@ -81,7 +81,6 @@ const OBJECT_COORDINATES = {
   }
 };
 
-//const NEARBY_COUNT = 10;
 
 const createObject = () => {
   const newObject = {
@@ -110,5 +109,4 @@ const createObject = () => {
   return newObject;
 };
 
-const getNearbyObject = (count) => Array.from({length: count}, createObject);
-export {getNearbyObject};
+export {createObject};
