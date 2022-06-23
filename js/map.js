@@ -19,26 +19,11 @@ const pinIcon = L.icon({
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 });
-pageDisabled(true);
-const map = L.map('map-canvas')
-  .on('load', () => {
-    pageDisabled(false); //console.log('Карта инициализирована');
-  })
-  .setView({
-    lat: BasicMapSetup.lat,
-    lng: BasicMapSetup.lng,
-  }, BasicMapSetup.scale);
 
-L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-).addTo(map);
 
 //--------------------------------------------------------------------------------------------------------
 
-const setMainPin = () => {
+const setMainPin = (map) => {
   const mainPinMarker = L.marker(
     {
       lat: BasicMapSetup.lat,
@@ -53,11 +38,9 @@ const setMainPin = () => {
     document.querySelector('.ad-form').querySelector('#address').value = `${evt.target.getLatLng().lat.toFixed(BasicMapSetup.digits)} ${evt.target.getLatLng().lng.toFixed(BasicMapSetup.digits)}`;
   });
 };
-setMainPin();
 
 //------------------------------------------------------------------------------------------------
-
-const markerGroup = L.layerGroup().addTo(map);
+const markerGroup = L.layerGroup();
 
 const createNearbyMarker = ({author, offer, location}) => {
 
@@ -79,4 +62,25 @@ const createNearbyMarker = ({author, offer, location}) => {
   nearbyMarker.addTo(markerGroup).bindPopup(createCustomPopup({author, offer}));
 };
 
-export {createNearbyMarker};
+const loadMap = () => {
+  const map = L.map('map-canvas')
+    .on('load', () => {
+      pageDisabled(false); //console.log('Карта инициализирована');
+    })
+    .setView({
+      lat: BasicMapSetup.lat,
+      lng: BasicMapSetup.lng,
+    }, BasicMapSetup.scale);
+
+  L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
+  ).addTo(map);
+  setMainPin(map);
+  markerGroup.addTo(map);
+};
+
+
+export {loadMap, createNearbyMarker};
