@@ -2,7 +2,7 @@ import {setElement, hideElement, endingWord} from './util.js';
 
 const template = document.querySelector('#card').content.querySelector('.popup');
 
-const getCreateObjects = ({author, offer}) => {
+const createPopup = ({author, offer}) => {
   const element = template.cloneNode(true);
 
   const createElement = (selector, content) => {
@@ -88,4 +88,4 @@ const getCreateObjects = ({author, offer}) => {
 
 };
 
-export{getCreateObjects};
+export{createPopup};

@@ -1,5 +1,5 @@
 import {pageDisabled} from './form.js';
-import {getCreateObjects} from './create-object.js';
+import {createPopup} from './create-object.js';
 
 const BasicMapSetup = { // императорский Дворец так как попадает в диапазон в отличии от центра
   lat: 35.68563,
@@ -20,9 +20,6 @@ const pinIcon = L.icon({
   iconAnchor: [20, 40],
 });
 
-
-//--------------------------------------------------------------------------------------------------------
-
 const setMainPin = (map) => {
   const mainPinMarker = L.marker(
     {
@@ -39,15 +36,9 @@ const setMainPin = (map) => {
   });
 };
 
-//------------------------------------------------------------------------------------------------
 const markerGroup = L.layerGroup();
 
 const createNearbyMarker = ({author, offer, location}) => {
-
-  const createCustomPopup = () => {
-    const element = getCreateObjects({author, offer});
-    return element;
-  };
 
   const nearbyMarker = L.marker(
     {
@@ -58,8 +49,7 @@ const createNearbyMarker = ({author, offer, location}) => {
       icon: pinIcon,
     },
   );
-
-  nearbyMarker.addTo(markerGroup).bindPopup(createCustomPopup({author, offer}));
+  nearbyMarker.addTo(markerGroup).bindPopup(createPopup({author, offer}));
 };
 
 const loadMap = () => {
@@ -81,6 +71,5 @@ const loadMap = () => {
   setMainPin(map);
   markerGroup.addTo(map);
 };
-
 
 export {loadMap, createNearbyMarker};
