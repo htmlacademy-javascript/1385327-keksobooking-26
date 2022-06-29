@@ -1,5 +1,5 @@
-import {pageDisabled} from './form.js';
-import {createPopup} from './create-object.js';
+import { pageDisabled } from './page-switcher.js';
+import { createPopup } from './create-object.js';
 
 const BasicMapSetup = { // императорский Дворец так как попадает в диапазон в отличии от центра
   lat: 35.68563,
@@ -20,20 +20,41 @@ const pinIcon = L.icon({
   iconAnchor: [20, 40],
 });
 
-const setMainPin = (map) => {
-  const mainPinMarker = L.marker(
-    {
-      lat: BasicMapSetup.lat,
-      lng: BasicMapSetup.lng,
-    },
-    {
-      draggable: true,
-      icon: mainPinIcon,
-    },
-  );
-  mainPinMarker.addTo(map).on('move', (evt) => {
-    document.querySelector('.ad-form').querySelector('#address').value = `${evt.target.getLatLng().lat.toFixed(BasicMapSetup.digits)} ${evt.target.getLatLng().lng.toFixed(BasicMapSetup.digits)}`;
+const map = L.map('map-canvas');
+
+const mainPinMarker = L.marker(
+  {
+    lat: BasicMapSetup.lat,
+    lng: BasicMapSetup.lng,
+  },
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+);
+
+const getPoint = () => {
+  const point = mainPinMarker.getLatLng();
+  document.querySelector('.ad-form').querySelector('#address').value = `${point.lat.toFixed(BasicMapSetup.digits)}, ${point.lng.toFixed(BasicMapSetup.digits)}`;
+};
+
+const setMainPin = () => {
+  mainPinMarker.addTo(map).on('move', () => {
+    getPoint();
   });
+};
+// const setMainPin = () => {
+//   mainPinMarker.addTo(map).on('move', (evt) => {
+//     document.querySelector('.ad-form').querySelector('#address').value = `${evt.target.getLatLng().lat.toFixed(BasicMapSetup.digits)} ${evt.target.getLatLng().lng.toFixed(BasicMapSetup.digits)}`;
+//   });
+// };
+
+const resetMainPin =() => {
+  mainPinMarker.setLatLng({
+    lat: BasicMapSetup.lat,
+    lng: BasicMapSetup.lng,
+  });
+  getPoint();//document.querySelector('.ad-form').querySelector('#address').value = `${BasicMapSetup.lat} ${BasicMapSetup.lng}`;
 };
 
 const markerGroup = L.layerGroup();
@@ -53,10 +74,9 @@ const createNearbyMarker = ({author, offer, location}) => {
 };
 
 const loadMap = () => {
-  const map = L.map('map-canvas')
-    .on('load', () => {
-      pageDisabled(false); //console.log('Карта инициализирована');
-    })
+  map.on('load', () => {
+    pageDisabled(false); //console.log('Карта инициализирована');
+  })
     .setView({
       lat: BasicMapSetup.lat,
       lng: BasicMapSetup.lng,
@@ -72,4 +92,14 @@ const loadMap = () => {
   markerGroup.addTo(map);
 };
 
-export {loadMap, createNearbyMarker};
+const resetMap = () => {
+  map.setView({
+    lat: BasicMapSetup.lat,
+    lng: BasicMapSetup.lng,
+  }, BasicMapSetup.scale);
+
+  resetMainPin();
+  map.closePopup();
+};
+
+export { loadMap, createNearbyMarker, resetMap };

@@ -72,23 +72,41 @@ const endingWord = (value, words) => {
   return words[2];
 };
 
-const showAlert = (message) => {
+const showError = (message) => {
   const alertContainer = document.createElement('div');
-  alertContainer.style.zIndex = '100';
+  alertContainer.style.zIndex = '1100';
   alertContainer.style.position = 'absolute';
   alertContainer.style.left = '0';
-  alertContainer.style.top = '0';
-  alertContainer.style.right = '0';
-  alertContainer.style.padding = '10px 3px';
-  alertContainer.style.fontSize = '30px';
+  alertContainer.style.top = '95px';
+  alertContainer.style.width = '100%';
+  alertContainer.style.height = '550px';
+  alertContainer.style.overflow = 'auto';
+
+  alertContainer.style.paddingTop = '300px';
+  alertContainer.style.fontSize = '50px';
   alertContainer.style.textAlign = 'center';
-  alertContainer.style.backgroundColor = 'red';
+  alertContainer.style.color = '#ffffff';
+  alertContainer.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
 
   alertContainer.textContent = message;
 
   document.body.append(alertContainer);
 
+  const image = document.createElement('div');
+  image.style.zIndex = '1101';
+  image.style.position = 'absolute';
+  image.style.left = '50%';
+  image.style.top = '100px';
+  image.style.height = '121px';
+  image.style.width = '109px';
+
+  image.style.backgroundImage = 'url("../img/muffin-white.svg")';
+  image.style.transform = 'translate(-50%)';
+
+  alertContainer.append(image);
+
   setTimeout(() => {
+    image.remove();
     alertContainer.remove();
   }, 5000);
 };
@@ -102,5 +120,5 @@ export {
   setElement,
   hideElement,
   endingWord,
-  showAlert
+  showError
 };
