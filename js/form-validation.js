@@ -1,5 +1,5 @@
 import { sendData } from './api.js';
-import { blockSubmitButton, unblockSubmitButton, resetForm, openMessage, createSuccess, createError } from './form.js';
+import { blockSubmitButton, unblockSubmitButton, openMessage, createSuccess, createError, resetForm } from './form.js';
 
 const form = document.querySelector('.ad-form');
 const titleField = form.querySelector('#title');
@@ -158,7 +158,7 @@ checkinField.addEventListener('change', onCheckinChange);
 checkoutField.addEventListener('change', onCheckoutChange);
 // ------------------------------------------------------------------------------------------------------------
 
-const setFormSubmit = (onSuccess) => {
+const setFormSubmit = () => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
@@ -166,7 +166,6 @@ const setFormSubmit = (onSuccess) => {
       blockSubmitButton();
       sendData(
         () => {
-          onSuccess();
           unblockSubmitButton();
           resetForm();
           openMessage(createSuccess());

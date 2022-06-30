@@ -1,7 +1,5 @@
-import { showError } from './util.js';
-import { filtersDisabled } from './form.js';
 
-const getData = (onSuccess) => {
+const getData = (onSuccess, onFail) => {
   fetch('https://26.javascript.pages.academy/keksobooking/data')
     .then((response) => {
       if (response.ok) {
@@ -14,13 +12,12 @@ const getData = (onSuccess) => {
       onSuccess(data);
     })
     .catch(() => {
-      filtersDisabled(true);
-      showError('Cервер временно недоступен, попробуйте перезагрузить страницу или обратиться позже');
+      onFail();
     });
 };
 
 const sendData = (onSuccess, onFail, body) => {
-  fetch('https://26.javascript.pages.academ/keksobooking',
+  fetch('https://26.javascript.pages.academy/keksobooking',
     {
       method: 'POST',
       body,
@@ -29,11 +26,11 @@ const sendData = (onSuccess, onFail, body) => {
       if (response.ok) {
         onSuccess();
       } else {
-        onFail('Не удалось отправить форму. Пожалуйста, попробуйте еще раз'); // ------------------------------------зачем? в каком случае?
+        onFail();
       }
     })
     .catch(() => {
-      onFail('Не удалось отправить форму. Пожалуйста, попробуйте еще раз'); // ------------------------------------зачем? в каком случае?
+      onFail();
     });
 };
 

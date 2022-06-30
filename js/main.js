@@ -1,8 +1,9 @@
-import {pageDisabled} from './page-switcher.js';
-import {loadMap, createNearbyMarker} from './map.js';
-import {setFormSubmit} from'./form-validation.js';
-import {getData} from './api.js';
-import {resetForm} from './form.js';
+import { pageDisabled } from './page-switcher.js';
+import { loadMap, createNearbyMarker } from './map.js';
+import { setFormSubmit } from './form-validation.js';
+import { getData } from './api.js';
+import { showError } from './util.js';
+import { filtersDisabled } from './form.js';
 
 pageDisabled(true);
 
@@ -12,6 +13,13 @@ const getNearbyObject = (nearbyObject) =>{
 };
 
 // getData(getNearbyObject);
-getData((data) => {getNearbyObject(data.slice(0, 10));});
+getData(
+  (data) => {
+    getNearbyObject(data.slice(0, 10));
+  },
+  () => {
+    filtersDisabled(true);
+    showError('Cервер временно недоступен, попробуйте перезагрузить страницу или обратиться позже');
+  });
 
-setFormSubmit(resetForm);
+setFormSubmit();

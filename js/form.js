@@ -5,7 +5,7 @@ const adForm = document.querySelector('.ad-form');
 
 const mapFilters = document.querySelector('.map__filters');
 const mapFilterSelects = mapFilters.querySelectorAll('.map__features');
-const mapFilterFieldsets = mapFilters.querySelectorAll('.map__filter');
+const mapFilterFieldset = mapFilters.querySelectorAll('.map__filter');
 
 const submitButton = adForm.querySelector('.ad-form__submit');
 const resetButton = adForm.querySelector('.ad-form__reset');
@@ -49,22 +49,30 @@ function closeMessage () {
 const filtersDisabled = (isDisabled) => {
   mapFilters.classList.toggle('map__filters--disabled', isDisabled);
 
-  mapFilterFieldsets.forEach((item) => {
-    item.disabled = isDisabled;
+  mapFilterFieldset.forEach((item) => {
+    if (!isDisabled) {
+      item.setAttribute('disabled', isDisabled);
+    } else {
+      item.removeAttribute('disabled');
+    }
   });
 
   mapFilterSelects.forEach((item) => {
-    item.disabled = isDisabled;
+    if (!isDisabled) {
+      item.setAttribute('disabled', isDisabled);
+    } else {
+      item.removeAttribute('disabled');
+    }
   });
 
 };
 
 const blockSubmitButton = () => {
-  submitButton.disabled = true;
+  submitButton.setAttribute('disabled', true);
 };
 
 const unblockSubmitButton = () => {
-  submitButton.disabled = false;
+  submitButton.removeAttribute('disabled');
 };
 
 
