@@ -1,3 +1,6 @@
+import { sendData } from './api.js';
+import { blockSubmitButton, unblockSubmitButton, openMessage, createSuccess, createError, resetForm } from './form.js';
+
 const form = document.querySelector('.ad-form');
 const titleField = form.querySelector('#title');
 const addressField = form.querySelector('#address');
@@ -104,6 +107,10 @@ sliderElement.noUiSlider.on('slide', () => {
   priceField.value = sliderElement.noUiSlider.get();
   pristine.validate(priceField);
 });
+
+const resetSlider = () => {
+  sliderElement.noUiSlider.reset();
+};
 // ------------------------------------------------------------------------------------------------------------
 const validateRoomsAndGuests = () => (Number(guestsField.value) <= Number(roomsField.value) && Number(roomsField.value) !== 100 && Number(guestsField.value) !== 0) || (Number(roomsField.value) === 100 && Number(guestsField.value) === 0);
 
@@ -150,10 +157,27 @@ const onCheckoutChange = () => {
 checkinField.addEventListener('change', onCheckinChange);
 checkoutField.addEventListener('change', onCheckoutChange);
 // ------------------------------------------------------------------------------------------------------------
-form.addEventListener('submit', (evt) => {
-  if(pristine.validate()) {
-    //evt.preventDefault(); console.log('true');
-    return true;
-  }
-  evt.preventDefault();
-});
+
+const setFormSubmit = () => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    if(pristine.validate()) {
+      blockSubmitButton();
+      sendData(
+        () => {
+          unblockSubmitButton();
+          resetForm();
+          openMessage(createSuccess());
+        },
+        () => {
+          unblockSubmitButton();
+          openMessage(createError());
+        },
+        new FormData(evt.target),
+      );
+    }
+  });
+};
+
+export { setFormSubmit, resetSlider };
