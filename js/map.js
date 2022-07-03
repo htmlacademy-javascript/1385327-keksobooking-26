@@ -92,6 +92,10 @@ const loadMap = () => {
   markerGroup.addTo(map);
 };
 
+const removeMarkerGroup = () => {
+  markerGroup.clearLayers();
+};
+
 const resetMap = () => {
   map.setView({
     lat: BasicMapSetup.lat,
@@ -102,4 +106,4 @@ const resetMap = () => {
   map.closePopup();
 };
 
-export { loadMap, createNearbyMarker, resetMap };
+export { loadMap, createNearbyMarker, resetMap, removeMarkerGroup };
