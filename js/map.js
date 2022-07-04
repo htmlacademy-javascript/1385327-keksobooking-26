@@ -43,18 +43,13 @@ const setMainPin = () => {
     getPoint();
   });
 };
-// const setMainPin = () => {
-//   mainPinMarker.addTo(map).on('move', (evt) => {
-//     document.querySelector('.ad-form').querySelector('#address').value = `${evt.target.getLatLng().lat.toFixed(BasicMapSetup.digits)} ${evt.target.getLatLng().lng.toFixed(BasicMapSetup.digits)}`;
-//   });
-// };
 
 const resetMainPin =() => {
   mainPinMarker.setLatLng({
     lat: BasicMapSetup.lat,
     lng: BasicMapSetup.lng,
   });
-  getPoint();//document.querySelector('.ad-form').querySelector('#address').value = `${BasicMapSetup.lat} ${BasicMapSetup.lng}`;
+  getPoint();
 };
 
 const markerGroup = L.layerGroup();
@@ -75,7 +70,7 @@ const createNearbyMarker = ({author, offer, location}) => {
 
 const loadMap = () => {
   map.on('load', () => {
-    pageDisabled(false); //console.log('Карта инициализирована');
+    pageDisabled(false);
   })
     .setView({
       lat: BasicMapSetup.lat,
@@ -92,8 +87,9 @@ const loadMap = () => {
   markerGroup.addTo(map);
 };
 
-const removeMarkerGroup = () => {
+const resetMarkerGroup = () => {
   markerGroup.clearLayers();
+  markerGroup.closePopup();
 };
 
 const resetMap = () => {
@@ -103,7 +99,8 @@ const resetMap = () => {
   }, BasicMapSetup.scale);
 
   resetMainPin();
-  map.closePopup();
+  resetMarkerGroup();
+
 };
 
-export { loadMap, createNearbyMarker, resetMap, removeMarkerGroup };
+export { loadMap, createNearbyMarker, resetMap, resetMarkerGroup };

@@ -1,4 +1,4 @@
-import { createNearbyMarker, removeMarkerGroup } from './map.js';
+import { resetMarkerGroup } from './map.js';
 
 const DEFAULT_VALUE = 'any';
 const PriceRanges = {
@@ -19,49 +19,49 @@ const PriceRanges = {
     maxPrice : 100000,
   },
 };
-const mapFilters = document.querySelector('.map__filters');
+const mapFiltersElement = document.querySelector('.map__filters');
 
-const typeHousingElement = mapFilters.querySelector('#housing-type');
-const priceHousingElement = mapFilters.querySelector('#housing-price');
-const roomsHousingElement = mapFilters.querySelector('#housing-rooms');
-const guestsHousingElement = mapFilters.querySelector('#housing-guests');
+const typeHousingElement = mapFiltersElement.querySelector('#housing-type');
+const priceHousingElement = mapFiltersElement.querySelector('#housing-price');
+const roomsHousingElement = mapFiltersElement.querySelector('#housing-rooms');
+const guestsHousingElement = mapFiltersElement.querySelector('#housing-guests');
+const featuresHousingElement = mapFiltersElement.querySelector('#housing-features');
 
-// console.log(typeHousingElement.value, priceHousingElement.value, roomsHousingElement.value, guestsHousingElement.value);
-// console.log(typeof(roomsHousingElement.value));
+const checkField = (cb) => {
 
-const checkType = (cb) => {
-
-  mapFilters.addEventListener('change', () => { //evt
-    // console.log(typeHousingElement.value, priceHousingElement.value, roomsHousingElement.value, guestsHousingElement.value);
-    // console.log(evt.target);
-    removeMarkerGroup();
+  mapFiltersElement.addEventListener('change', () => { //evt
+    resetMarkerGroup();
     cb();
   });
 };
 
-
-const typeHousing = (object, type) => object.offer.type === type || type === DEFAULT_VALUE;
-
-const priceHousing = (object, price) => object.offer.price >= PriceRanges[price.toUpperCase()].minPrice && object.offer.price <= PriceRanges[price.toUpperCase()].maxPrice;
-
-const roomsHousing = (object, rooms) => String(object.offer.rooms) === rooms || rooms === DEFAULT_VALUE;
-
-const guestsHousing = (object, guests) => String(object.offer.guests) === guests || guests === DEFAULT_VALUE;
-
 const compareObject = (object) => {
+
   const type = typeHousingElement.value;
   const price = priceHousingElement.value;
   const rooms = roomsHousingElement.value;
   const guests = guestsHousingElement.value;
+  const checkFeatures = featuresHousingElement.querySelectorAll('input:checked');
 
-  return  typeHousing(object, type) && priceHousing(object, price) && roomsHousing(object, rooms) && guestsHousing(object, guests);
+  const verifyTypeHousing = () => object.offer.type === type || type === DEFAULT_VALUE;
+
+  const verifyPriceHousing = () => object.offer.price >= PriceRanges[price.toUpperCase()].minPrice && object.offer.price <= PriceRanges[price.toUpperCase()].maxPrice;
+
+  const verifyRoomsHousing = () => String(object.offer.rooms) === rooms || rooms === DEFAULT_VALUE;
+
+  const verifyGuestsHousing = () => String(object.offer.guests) === guests || guests === DEFAULT_VALUE;
+
+  const verifyFeaturesHousing = () => {
+
+    if (checkFeatures.length) {
+      if (object.offer.features) {
+        return Array.from(checkFeatures).every((checkbox) => object.offer.features.includes(checkbox.value));
+      }
+    } else {
+      return checkFeatures.length === 0;
+    }
+  };
+  return  verifyTypeHousing(object, type) && verifyPriceHousing(object, price) && verifyRoomsHousing(object, rooms) && verifyGuestsHousing(object, guests) && verifyFeaturesHousing(object, checkFeatures);
 };
 
-const getNearbyObject = (nearbyObject) =>{
-  nearbyObject.slice().filter(compareObject).slice(0, 10).forEach(({author, offer, location}) => {
-    createNearbyMarker({author, offer, location});
-    // console.log(offer.type, offer.price, offer.rooms, offer.guests);
-  });
-};
-
-export { getNearbyObject, checkType };
+export { compareObject, checkField };

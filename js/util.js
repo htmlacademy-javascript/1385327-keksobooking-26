@@ -111,6 +111,14 @@ const showError = (message) => {
   }, 5000);
 };
 
+const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
 export {
   getRandomPositiveInteger,
   getRandomPositiveFloat,
@@ -120,5 +128,6 @@ export {
   setElement,
   hideElement,
   endingWord,
-  showError
+  showError,
+  debounce
 };

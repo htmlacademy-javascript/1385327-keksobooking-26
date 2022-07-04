@@ -1,23 +1,27 @@
 import { pageDisabled } from './page-switcher.js';
-import { loadMap, } from './map.js'; // createNearbyMarker
+import { loadMap, createNearbyMarker} from './map.js';
 import { setFormSubmit } from './form-validation.js';
 import { getData } from './api.js';
-import { showError } from './util.js';
+import { showError, debounce } from './util.js';
 import { filtersDisabled } from './form.js';
-import { getNearbyObject, checkType } from './map-filters.js';
+import { checkField, compareObject } from './map-filters.js';
+
+const NEARBY_OBJECT = 10;
+const RERENDER_DELAY = 500;
 
 pageDisabled(true);
 
 loadMap();
-// const getNearbyObject = (nearbyObject) =>{
-//   nearbyObject.forEach(({author, offer, location}) => createNearbyMarker({author, offer, location}));
-// };
+const getNearbyObject = (nearbyObject) =>{
+  nearbyObject.slice().filter(compareObject).slice(0, NEARBY_OBJECT).forEach(({author, offer, location}) => {
+    createNearbyMarker({author, offer, location});
+  });
+};
 
-// getData(getNearbyObject);
 getData(
   (data) => {
-    getNearbyObject(data); //.slice(0, 10)
-    checkType(() => getNearbyObject(data));
+    getNearbyObject(data);
+    checkField( debounce(() => getNearbyObject(data), RERENDER_DELAY,));
   },
   () => {
     filtersDisabled(true);
