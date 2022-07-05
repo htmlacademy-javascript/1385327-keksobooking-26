@@ -1,16 +1,16 @@
 import { sendData } from './api.js';
 import { blockSubmitButton, unblockSubmitButton, openMessage, createSuccess, createError, resetForm } from './form.js';
 
-const form = document.querySelector('.ad-form');
-const titleField = form.querySelector('#title');
-const addressField = form.querySelector('#address');
-const typeField = form.querySelector('#type');
-const priceField = form.querySelector('#price');
+const adFormElement = document.querySelector('.ad-form');
+const titleElement = adFormElement.querySelector('#title');
+const addressElement = adFormElement.querySelector('#address');
+const typeElement = adFormElement.querySelector('#type');
+const priceElement = adFormElement.querySelector('#price');
 const sliderElement = document.querySelector('.ad-form__slider');
-const roomsField = form.querySelector('#room_number');
-const guestsField = form.querySelector('#capacity');
-const checkinField = form.querySelector('#timein');
-const checkoutField = form.querySelector('#timeout');
+const roomsElement = adFormElement.querySelector('#room_number');
+const guestsElement = adFormElement.querySelector('#capacity');
+const checkinElement = adFormElement.querySelector('#timein');
+const checkoutElement = adFormElement.querySelector('#timeout');
 
 const TITLE_SIZE = {
   min: 30,
@@ -29,7 +29,7 @@ const typePrice = {
   maxPrice: 100000
 };
 
-const pristine =  new Pristine(form, {
+const pristine =  new Pristine(adFormElement, {
   classTo: 'ad-form__element',
   successClass: 'ad-form__element--valid',
   errorClass: 'ad-form__element--invalid',
@@ -46,17 +46,17 @@ const getErrorTitleMessage = (value) => {
     return `Максимальная длина ${TITLE_SIZE.max} символов`;
   }
 };
-pristine.addValidator(titleField, validateTitle, getErrorTitleMessage);
+pristine.addValidator(titleElement, validateTitle, getErrorTitleMessage);
 
-addressField.value = `${TOKYO_DOWNTOWN.lat} ${TOKYO_DOWNTOWN.lng}`; // Координаты центра Токио по умолчанию (и чтоб не ругался)
+addressElement.value = `${TOKYO_DOWNTOWN.lat} ${TOKYO_DOWNTOWN.lng}`; // Координаты центра Токио по умолчанию (и чтоб не ругался)
 
 const setForType = () => {
-  switch (typeField.value) {
-    case 'bungalow' : {priceField.placeholder = typePrice.bungalow; break;} // 0
-    case 'flat' : {priceField.placeholder = typePrice.flat; break;} // 1000
-    case 'hotel' : {priceField.placeholder = typePrice.hotel; break;} // 3000
-    case 'house' : {priceField.placeholder = typePrice.house; break;} // 5000
-    case 'palace' : {priceField.placeholder = typePrice.palace;} // 10000
+  switch (typeElement.value) {
+    case 'bungalow' : {priceElement.placeholder = typePrice.bungalow; break;} // 0
+    case 'flat' : {priceElement.placeholder = typePrice.flat; break;} // 1000
+    case 'hotel' : {priceElement.placeholder = typePrice.hotel; break;} // 3000
+    case 'house' : {priceElement.placeholder = typePrice.house; break;} // 5000
+    case 'palace' : {priceElement.placeholder = typePrice.palace;} // 10000
   }
 };
 
@@ -80,86 +80,86 @@ noUiSlider.create(sliderElement, {
   },
 });
 
-const validatePrice = () => Number(priceField.value) >= typePrice[typeField.value] && typePrice.maxPrice >= Number(priceField.value);
+const validatePrice = () => Number(priceElement.value) >= typePrice[typeElement.value] && typePrice.maxPrice >= Number(priceElement.value);
 const getErrorPriceMessage = () => {
-  if (Number(priceField.value) < typePrice[typeField.value]) {
-    return `Минимальная цена должна быть больше ${typePrice[typeField.value]}`;
-  } else if (Number(priceField.value) > typePrice.maxPrice) {
+  if (Number(priceElement.value) < typePrice[typeElement.value]) {
+    return `Минимальная цена должна быть больше ${typePrice[typeElement.value]}`;
+  } else if (Number(priceElement.value) > typePrice.maxPrice) {
     return `Стоимость не должна превышать ${typePrice.maxPrice}`;
   }
 };
-pristine.addValidator(priceField, validatePrice, getErrorPriceMessage);
+pristine.addValidator(priceElement, validatePrice, getErrorPriceMessage);
 
 const onTypeChange = () => {
   setForType();
-  pristine.validate(priceField);
+  pristine.validate(priceElement);
 };
 
 const onPriceChange = () => {
-  sliderElement.noUiSlider.set(Number(priceField.value));
+  sliderElement.noUiSlider.set(Number(priceElement.value));
 };
 
-typeField.addEventListener('change', onTypeChange);
-priceField.addEventListener('change', onPriceChange);
+typeElement.addEventListener('change', onTypeChange);
+priceElement.addEventListener('change', onPriceChange);
 
 sliderElement.noUiSlider.on('slide', () => {
   setForType();
-  priceField.value = sliderElement.noUiSlider.get();
-  pristine.validate(priceField);
+  priceElement.value = sliderElement.noUiSlider.get();
+  pristine.validate(priceElement);
 });
 
 const resetSlider = () => {
   sliderElement.noUiSlider.reset();
 };
 // ------------------------------------------------------------------------------------------------------------
-const validateRoomsAndGuests = () => (Number(guestsField.value) <= Number(roomsField.value) && Number(roomsField.value) !== 100 && Number(guestsField.value) !== 0) || (Number(roomsField.value) === 100 && Number(guestsField.value) === 0);
+const validateRoomsAndGuests = () => (Number(guestsElement.value) <= Number(roomsElement.value) && Number(roomsElement.value) !== 100 && Number(guestsElement.value) !== 0) || (Number(roomsElement.value) === 100 && Number(guestsElement.value) === 0);
 
 const getErrorRoomsMessage = () => {
-  if (Number(roomsField.value) < Number(guestsField.value)) {
+  if (Number(roomsElement.value) < Number(guestsElement.value)) {
     return 'Количество гостей не должно превышать количество комнат';
-  }else if(Number(roomsField.value) !== 100 && Number(guestsField.value) === 0) {
+  }else if(Number(roomsElement.value) !== 100 && Number(guestsElement.value) === 0) {
     return 'не для гостей выбирайте 100 комнат';
   }
 };
 
 const getErrorGuestsMessage = () => {
-  if (Number(guestsField.value) > Number(roomsField.value)) {
+  if (Number(guestsElement.value) > Number(roomsElement.value)) {
     return 'Количество комнат не может быть меньше количества гостей';
-  } else if(Number(roomsField.value) === 100 && Number(guestsField.value) !== 0) {
+  } else if(Number(roomsElement.value) === 100 && Number(guestsElement.value) !== 0) {
     return '100 комнат это не для гостей';
   }
 };
-pristine.addValidator(guestsField, validateRoomsAndGuests, getErrorRoomsMessage);
-pristine.addValidator(roomsField, validateRoomsAndGuests, getErrorGuestsMessage);
+pristine.addValidator(guestsElement, validateRoomsAndGuests, getErrorRoomsMessage);
+pristine.addValidator(roomsElement, validateRoomsAndGuests, getErrorGuestsMessage);
 
 const onRoomsChange = () => {
-  pristine.validate(roomsField);
-  pristine.validate(guestsField);
+  pristine.validate(roomsElement);
+  pristine.validate(guestsElement);
 };
-roomsField.addEventListener('change',  onRoomsChange);
+roomsElement.addEventListener('change',  onRoomsChange);
 
 const onGuestsChange = () => {
-  pristine.validate(guestsField);
-  pristine.validate(roomsField);
+  pristine.validate(guestsElement);
+  pristine.validate(roomsElement);
 };
-guestsField.addEventListener('change', onGuestsChange);
+guestsElement.addEventListener('change', onGuestsChange);
 // ------------------------------------------------------------------------------------------------------------
 const onCheckinChange = () => {
-  if (checkinField.value !== checkoutField.value) {
-    checkoutField.value = checkinField.value;
+  if (checkinElement.value !== checkoutElement.value) {
+    checkoutElement.value = checkinElement.value;
   }
 };
 const onCheckoutChange = () => {
-  if (checkinField.value !== checkoutField.value) {
-    checkinField.value = checkoutField.value;
+  if (checkinElement.value !== checkoutElement.value) {
+    checkinElement.value = checkoutElement.value;
   }
 };
-checkinField.addEventListener('change', onCheckinChange);
-checkoutField.addEventListener('change', onCheckoutChange);
+checkinElement.addEventListener('change', onCheckinChange);
+checkoutElement.addEventListener('change', onCheckoutChange);
 // ------------------------------------------------------------------------------------------------------------
 
 const setFormSubmit = () => {
-  form.addEventListener('submit', (evt) => {
+  adFormElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     if(pristine.validate()) {

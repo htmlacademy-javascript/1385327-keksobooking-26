@@ -21,12 +21,6 @@ const PriceRanges = {
 };
 const mapFiltersElement = document.querySelector('.map__filters');
 
-const typeHousingElement = mapFiltersElement.querySelector('#housing-type');
-const priceHousingElement = mapFiltersElement.querySelector('#housing-price');
-const roomsHousingElement = mapFiltersElement.querySelector('#housing-rooms');
-const guestsHousingElement = mapFiltersElement.querySelector('#housing-guests');
-const featuresHousingElement = mapFiltersElement.querySelector('#housing-features');
-
 const checkField = (cb) => {
 
   mapFiltersElement.addEventListener('change', () => { //evt
@@ -37,11 +31,11 @@ const checkField = (cb) => {
 
 const compareObject = (object) => {
 
-  const type = typeHousingElement.value;
-  const price = priceHousingElement.value;
-  const rooms = roomsHousingElement.value;
-  const guests = guestsHousingElement.value;
-  const checkFeatures = featuresHousingElement.querySelectorAll('input:checked');
+  const type = mapFiltersElement.querySelector('#housing-type').value;
+  const price = mapFiltersElement.querySelector('#housing-price').value;
+  const rooms = mapFiltersElement.querySelector('#housing-rooms').value;
+  const guests = mapFiltersElement.querySelector('#housing-guests').value;
+  const checkFeatures = mapFiltersElement.querySelector('#housing-features').querySelectorAll('input:checked');
 
   const verifyTypeHousing = () => object.offer.type === type || type === DEFAULT_VALUE;
 

@@ -14,7 +14,7 @@ const mainPinIcon = L.icon({
   iconAnchor: [26, 52],
 });
 
-const pinIcon = L.icon({
+const nearbyPinIcon = L.icon({
   iconUrl: './img/pin.svg',
   iconSize: [40, 40],
   iconAnchor: [20, 40],
@@ -33,14 +33,14 @@ const mainPinMarker = L.marker(
   },
 );
 
-const getPoint = () => {
+const setAddress = () => {
   const point = mainPinMarker.getLatLng();
   document.querySelector('.ad-form').querySelector('#address').value = `${point.lat.toFixed(BasicMapSetup.digits)}, ${point.lng.toFixed(BasicMapSetup.digits)}`;
 };
 
 const setMainPin = () => {
   mainPinMarker.addTo(map).on('move', () => {
-    getPoint();
+    setAddress();
   });
 };
 
@@ -49,23 +49,23 @@ const resetMainPin =() => {
     lat: BasicMapSetup.lat,
     lng: BasicMapSetup.lng,
   });
-  getPoint();
+  setAddress();
 };
 
 const markerGroup = L.layerGroup();
 
 const createNearbyMarker = ({author, offer, location}) => {
 
-  const nearbyMarker = L.marker(
+  const nearbyPinMarker = L.marker(
     {
       lat: location.lat,
       lng: location.lng,
     },
     {
-      icon: pinIcon,
+      icon: nearbyPinIcon,
     },
   );
-  nearbyMarker.addTo(markerGroup).bindPopup(createPopup({author, offer}));
+  nearbyPinMarker.addTo(markerGroup).bindPopup(createPopup({author, offer}));
 };
 
 const loadMap = () => {

@@ -1,4 +1,4 @@
-import {setElement, hideElement, endingWord} from './util.js';
+import {setElement, hideElement, setEndingWord} from './util.js';
 
 const template = document.querySelector('#card').content.querySelector('.popup');
 
@@ -33,7 +33,7 @@ const createPopup = ({author, offer}) => {
     case undefined : hideElement(element.querySelector('.popup__type'));
   }
 
-  createElement('.popup__text--capacity', `${offer.rooms} ${endingWord(offer.rooms, ['комната', 'комнаты', 'комнат'])} для ${offer.guests} ${endingWord(offer.guests, ['гостя', 'гостей', 'гостей'])} `);
+  createElement('.popup__text--capacity', `${offer.rooms} ${setEndingWord(offer.rooms, ['комната', 'комнаты', 'комнат'])} для ${offer.guests} ${setEndingWord(offer.guests, ['гостя', 'гостей', 'гостей'])} `);
   if (!offer.rooms || !offer.guests) {
     hideElement(element.querySelector('.popup__text--capacity'));
   }

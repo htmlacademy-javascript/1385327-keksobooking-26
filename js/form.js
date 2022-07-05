@@ -1,6 +1,7 @@
 import { resetMap } from './map.js';
 import { resetSlider } from './form-validation.js';
 
+
 const adForm = document.querySelector('.ad-form');
 
 const mapFilters = document.querySelector('.map__filters');
@@ -87,5 +88,29 @@ resetButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   resetForm();
 });
+
+
+// const setFormSubmit = () => {
+//   adForm.addEventListener('submit', (evt) => {
+//     evt.preventDefault();
+
+//     if(isValid) {
+//       blockSubmitButton();
+//       sendData(
+//         () => {
+//           unblockSubmitButton();
+//           resetForm();
+//           openMessage(createSuccess());
+//         },
+//         () => {
+//           unblockSubmitButton();
+//           openMessage(createError());
+//         },
+//         new FormData(evt.target),
+//       );
+//     }
+//   });
+// };
+
 
 export { openMessage, resetForm, filtersDisabled, blockSubmitButton, unblockSubmitButton, createSuccess, createError };

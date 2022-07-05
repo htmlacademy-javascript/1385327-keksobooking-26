@@ -12,7 +12,8 @@ const RERENDER_DELAY = 500;
 pageDisabled(true);
 
 loadMap();
-const getNearbyObject = (nearbyObject) =>{
+
+const getNearbyObject = (nearbyObject) => {
   nearbyObject.slice().filter(compareObject).slice(0, NEARBY_OBJECT).forEach(({author, offer, location}) => {
     createNearbyMarker({author, offer, location});
   });
