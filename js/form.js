@@ -1,5 +1,5 @@
 import { resetMap } from './map.js';
-import { resetSlider } from './form-validation.js';
+import { resetSlider, pristine } from './form-validation.js';
 
 
 const adForm = document.querySelector('.ad-form');
@@ -82,19 +82,20 @@ const resetForm = () => {
   resetSlider();
   mapFilters.reset();
   resetMap();
+  pristine.reset();
 };
-
-resetButton.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  resetForm();
-});
-
+const setFormReset = () => {
+  resetButton.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    resetForm();
+  });
+};
 
 // const setFormSubmit = () => {
 //   adForm.addEventListener('submit', (evt) => {
 //     evt.preventDefault();
 
-//     if(isValid) {
+//     if(pristine.validate()) {
 //       blockSubmitButton();
 //       sendData(
 //         () => {
@@ -113,4 +114,4 @@ resetButton.addEventListener('click', (evt) => {
 // };
 
 
-export { openMessage, resetForm, filtersDisabled, blockSubmitButton, unblockSubmitButton, createSuccess, createError };
+export { openMessage, resetForm, filtersDisabled, blockSubmitButton, unblockSubmitButton, createSuccess, createError, setFormReset };

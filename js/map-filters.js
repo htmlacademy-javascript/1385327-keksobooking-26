@@ -21,7 +21,7 @@ const PriceRanges = {
 };
 const mapFiltersElement = document.querySelector('.map__filters');
 
-const checkField = (cb) => {
+const changeFilterField = (cb) => {
 
   mapFiltersElement.addEventListener('change', () => { //evt
     resetMarkerGroup();
@@ -58,4 +58,4 @@ const compareObject = (object) => {
   return  verifyTypeHousing(object, type) && verifyPriceHousing(object, price) && verifyRoomsHousing(object, rooms) && verifyGuestsHousing(object, guests) && verifyFeaturesHousing(object, checkFeatures);
 };
 
-export { compareObject, checkField };
+export { compareObject, changeFilterField };

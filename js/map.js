@@ -35,7 +35,7 @@ const mainPinMarker = L.marker(
 
 const setAddress = () => {
   const point = mainPinMarker.getLatLng();
-  document.querySelector('.ad-form').querySelector('#address').value = `${point.lat.toFixed(BasicMapSetup.digits)}, ${point.lng.toFixed(BasicMapSetup.digits)}`;
+  document.querySelector('.ad-form').querySelector('#address').value = `${point.lat.toFixed(BasicMapSetup.digits)} ${point.lng.toFixed(BasicMapSetup.digits)}`;
 };
 
 const setMainPin = () => {
@@ -90,6 +90,7 @@ const loadMap = () => {
 const resetMarkerGroup = () => {
   markerGroup.clearLayers();
   markerGroup.closePopup();
+
 };
 
 const resetMap = () => {
