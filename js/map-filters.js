@@ -1,4 +1,3 @@
-import { resetMarkerGroup } from './map.js';
 
 const DEFAULT_VALUE = 'any';
 const PriceRanges = {
@@ -20,14 +19,6 @@ const PriceRanges = {
   },
 };
 const mapFiltersElement = document.querySelector('.map__filters');
-
-const changeFilterField = (cb) => {
-
-  mapFiltersElement.addEventListener('change', () => { //evt
-    resetMarkerGroup();
-    cb();
-  });
-};
 
 const compareObject = (object) => {
 
@@ -58,4 +49,4 @@ const compareObject = (object) => {
   return  verifyTypeHousing(object, type) && verifyPriceHousing(object, price) && verifyRoomsHousing(object, rooms) && verifyGuestsHousing(object, guests) && verifyFeaturesHousing(object, checkFeatures);
 };
 
-export { compareObject, changeFilterField };
+export { compareObject };

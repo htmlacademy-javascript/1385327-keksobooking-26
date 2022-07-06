@@ -1,5 +1,16 @@
-import { pageDisabled } from './page-switcher.js';
+import { pageDisabled, mapFiltersDisabled,  } from './page-switcher.js'; // adFormDisabled
 import { createPopup } from './create-object.js';
+import { showError, debounce } from './util.js';
+import { getData } from './api.js';
+import { compareObject } from './map-filters.js';
+
+const NEARBY_OBJECT = 10;
+
+const RERENDER_DELAY = 500;
+
+const copyData =[];
+
+const mapFiltersElement = document.querySelector('.map__filters');
 
 const BasicMapSetup = { // императорский Дворец так как попадает в диапазон в отличии от центра
   lat: 35.68563,
@@ -44,14 +55,6 @@ const setMainPin = () => {
   });
 };
 
-const resetMainPin =() => {
-  mainPinMarker.setLatLng({
-    lat: BasicMapSetup.lat,
-    lng: BasicMapSetup.lng,
-  });
-  setAddress();
-};
-
 const markerGroup = L.layerGroup();
 
 const createNearbyMarker = ({author, offer, location}) => {
@@ -68,9 +71,62 @@ const createNearbyMarker = ({author, offer, location}) => {
   nearbyPinMarker.addTo(markerGroup).bindPopup(createPopup({author, offer}));
 };
 
+const resetMainPin =() => {
+  mainPinMarker.setLatLng({
+    lat: BasicMapSetup.lat,
+    lng: BasicMapSetup.lng,
+  });
+  setAddress();
+};
+
+const resetMarkerGroup = () => {
+  markerGroup.clearLayers();
+  markerGroup.closePopup();
+};
+
+//----------------------------------------------------------------
+const createObject = (data) => {
+  data.forEach(({author, offer, location}) => {
+    createNearbyMarker({author, offer, location});
+  });
+};
+
+const getNearbyObject = (data) => {
+  mapFiltersDisabled(false);
+  createObject(data.slice(0, NEARBY_OBJECT));
+
+  mapFiltersElement.addEventListener('change', debounce(() => {
+    resetMarkerGroup();
+    createObject(data.filter(compareObject).slice(0, NEARBY_OBJECT));
+  }, RERENDER_DELAY));
+};
+
+//----------------------------------------------------------------
+
+const resetMap = () => {
+  map.setView({
+    lat: BasicMapSetup.lat,
+    lng: BasicMapSetup.lng,
+  }, BasicMapSetup.scale);
+
+  resetMainPin();
+  resetMarkerGroup();
+  createObject(copyData.slice(0, NEARBY_OBJECT));
+};
+//----------------------------------------------------------------
 const loadMap = () => {
   map.on('load', () => {
     pageDisabled(false);
+    getData(
+      (data) => {
+        copyData.push(...data);
+        getNearbyObject(copyData);
+      },
+      () => {
+        mapFiltersDisabled(true);
+        showError('Cервер временно недоступен, попробуйте перезагрузить страницу или обратиться позже');
+      }
+    );
   })
     .setView({
       lat: BasicMapSetup.lat,
@@ -87,21 +143,4 @@ const loadMap = () => {
   markerGroup.addTo(map);
 };
 
-const resetMarkerGroup = () => {
-  markerGroup.clearLayers();
-  markerGroup.closePopup();
-
-};
-
-const resetMap = () => {
-  map.setView({
-    lat: BasicMapSetup.lat,
-    lng: BasicMapSetup.lng,
-  }, BasicMapSetup.scale);
-
-  resetMainPin();
-  resetMarkerGroup();
-
-};
-
-export { loadMap, createNearbyMarker, resetMap, resetMarkerGroup };
+export { loadMap,  resetMap };

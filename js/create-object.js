@@ -62,17 +62,14 @@ const createPopup = ({author, offer}) => {
   createElement('.popup__description', offer.description);
 
   const photosContainer = element.querySelector('.popup__photos');
+  const photoT = photosContainer.querySelector('.popup__photo');
   if (offer.photos) {
     photosContainer.innerHTML = '';
-    for (let i = 0; i < offer.photos.length; i++) {
-      const photo = document.createElement('img');
-      photo.classList.add('popup__photo');
-      photo.src = `${offer.photos[i]}`;
-      photo.width = '45';
-      photo.height = '40';
-      photo.alt = 'Фотография жилья';
-      photosContainer.appendChild(photo);
-    }
+    offer.photos.forEach((photo) => {
+      const item = photoT.cloneNode(true);
+      item.src = photo;
+      photosContainer.append(item);
+    });
   } else {
     hideElement(element.querySelector('.popup__photos'));
   }

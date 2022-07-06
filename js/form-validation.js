@@ -1,5 +1,3 @@
-import { sendData } from './api.js';
-import { blockSubmitButton, unblockSubmitButton, openMessage, createSuccess, createError, resetForm } from './form.js';
 
 const adFormElement = document.querySelector('.ad-form');
 // const titleElement = adFormElement.querySelector('#title');
@@ -99,8 +97,8 @@ const onPriceChange = () => {
   sliderElement.noUiSlider.set(Number(priceElement.value));
 };
 
-typeElement.addEventListener('change', onTypeChange);
-priceElement.addEventListener('change', onPriceChange);
+// typeElement.addEventListener('change', onTypeChange);
+// priceElement.addEventListener('change', onPriceChange);
 
 sliderElement.noUiSlider.on('slide', () => {
   setForType();
@@ -124,62 +122,35 @@ const getErrorRoomsMessage = () => {
   }
 };
 
-// const getErrorGuestsMessage = () => {
-//   if (Number(guestsElement.value) > Number(roomsElement.value)) {
-//     return 'Количество комнат не может быть меньше количества гостей';
-//   } else if(Number(roomsElement.value) === 100 && Number(guestsElement.value) !== 0) {
-//     return '100 комнат это не для гостей';
-//   }
-// };
 pristine.addValidator(guestsElement, validateRoomsAndGuests, getErrorRoomsMessage);
-//pristine.addValidator(roomsElement, validateRoomsAndGuests, getErrorRoomsMessage); //getErrorGuestsMessage
 
 const onRoomsChange = () => {
-  //pristine.validate(roomsElement);
   pristine.validate(guestsElement);
 };
-roomsElement.addEventListener('change',  onRoomsChange);
+// roomsElement.addEventListener('change',  onRoomsChange);
 
 const onGuestsChange = () => {
   pristine.validate(guestsElement);
-  //pristine.validate(roomsElement);
 };
-guestsElement.addEventListener('change', onGuestsChange);
+// guestsElement.addEventListener('change', onGuestsChange);
 // ------------------------------------------------------------------------------------------------------------
 const onCheckinChange = () => {
-  if (checkinElement.value !== checkoutElement.value) {
-    checkoutElement.value = checkinElement.value;
-  }
+  checkoutElement.value = checkinElement.value;
 };
 const onCheckoutChange = () => {
-  if (checkinElement.value !== checkoutElement.value) {
-    checkinElement.value = checkoutElement.value;
-  }
+  checkinElement.value = checkoutElement.value;
 };
-checkinElement.addEventListener('change', onCheckinChange);
-checkoutElement.addEventListener('change', onCheckoutChange);
+// checkinElement.addEventListener('change', onCheckinChange);
+// checkoutElement.addEventListener('change', onCheckoutChange);
 // ------------------------------------------------------------------------------------------------------------
+const validateForm = () => {
 
-const setFormSubmit = () => {
-  adFormElement.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-
-    if(pristine.validate()) {
-      blockSubmitButton();
-      sendData(
-        () => {
-          unblockSubmitButton();
-          resetForm();
-          openMessage(createSuccess());
-        },
-        () => {
-          unblockSubmitButton();
-          openMessage(createError());
-        },
-        new FormData(evt.target),
-      );
-    }
-  });
+  typeElement.addEventListener('change', onTypeChange);
+  priceElement.addEventListener('change', onPriceChange);
+  roomsElement.addEventListener('change', onRoomsChange);
+  guestsElement.addEventListener('change', onGuestsChange);
+  checkinElement.addEventListener('change', onCheckinChange);
+  checkoutElement.addEventListener('change', onCheckoutChange);
 };
 
-export { setFormSubmit, resetSlider, pristine };
+export { resetSlider, pristine, validateForm };
