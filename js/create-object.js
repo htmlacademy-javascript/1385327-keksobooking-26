@@ -1,4 +1,4 @@
-import {setElement, hideElement, endingWord} from './util.js';
+import {setElement, hideElement, setEndingWord} from './util.js';
 
 const template = document.querySelector('#card').content.querySelector('.popup');
 
@@ -33,7 +33,7 @@ const createPopup = ({author, offer}) => {
     case undefined : hideElement(element.querySelector('.popup__type'));
   }
 
-  createElement('.popup__text--capacity', `${offer.rooms} ${endingWord(offer.rooms, ['комната', 'комнаты', 'комнат'])} для ${offer.guests} ${endingWord(offer.guests, ['гостя', 'гостей', 'гостей'])} `);
+  createElement('.popup__text--capacity', `${offer.rooms} ${setEndingWord(offer.rooms, ['комната', 'комнаты', 'комнат'])} для ${offer.guests} ${setEndingWord(offer.guests, ['гостя', 'гостей', 'гостей'])} `);
   if (!offer.rooms || !offer.guests) {
     hideElement(element.querySelector('.popup__text--capacity'));
   }
@@ -62,17 +62,14 @@ const createPopup = ({author, offer}) => {
   createElement('.popup__description', offer.description);
 
   const photosContainer = element.querySelector('.popup__photos');
+  const photoTemplate = photosContainer.querySelector('.popup__photo');
   if (offer.photos) {
     photosContainer.innerHTML = '';
-    for (let i = 0; i < offer.photos.length; i++) {
-      const photo = document.createElement('img');
-      photo.classList.add('popup__photo');
-      photo.src = `${offer.photos[i]}`;
-      photo.width = '45';
-      photo.height = '40';
-      photo.alt = 'Фотография жилья';
-      photosContainer.appendChild(photo);
-    }
+    offer.photos.forEach((photo) => {
+      const item = photoTemplate.cloneNode(true);
+      item.src = photo;
+      photosContainer.append(item);
+    });
   } else {
     hideElement(element.querySelector('.popup__photos'));
   }

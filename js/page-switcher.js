@@ -1,45 +1,55 @@
 
-const adForm = document.querySelector('.ad-form');
-const adFormFieldset = adForm.querySelectorAll('fieldset');
-const adFormSlider = adForm.querySelector('.ad-form__slider');
-const mapFilters = document.querySelector('.map__filters');
-const mapFilterSelects = mapFilters.querySelectorAll('.map__features');
-const mapFilterFieldset = mapFilters.querySelectorAll('.map__filter');
+const adFormElement = document.querySelector('.ad-form');
+const formFieldsetElements = adFormElement.querySelectorAll('fieldset');
+const formSliderElement = adFormElement.querySelector('.ad-form__slider');
 
-const pageDisabled = (isDisabled) => {
-  adForm.classList.toggle('ad-form--disabled', isDisabled);
-  mapFilters.classList.toggle('map__filters--disabled', isDisabled);
+const mapFiltersElement = document.querySelector('.map__filters');
+const mapFeaturesElements = mapFiltersElement.querySelectorAll('.map__features');
+const mapFilterElements = mapFiltersElement.querySelectorAll('.map__filter');
+
+const adFormDisabled = (isDisabled) => {
+  adFormElement.classList.toggle('ad-form--disabled', isDisabled);
 
   if (isDisabled){
-    adFormSlider.setAttribute('disabled', isDisabled);
+    formSliderElement.setAttribute('disabled', isDisabled);
 
-    adFormFieldset.forEach((item) => {
-      item.setAttribute('disabled', isDisabled);
-    });
-
-    mapFilterFieldset.forEach((item) => {
-      item.setAttribute('disabled', isDisabled);
-    });
-
-    mapFilterSelects.forEach((item) => {
+    formFieldsetElements.forEach((item) => {
       item.setAttribute('disabled', isDisabled);
     });
   } else {
-    adFormSlider.removeAttribute('disabled');
+    formSliderElement.removeAttribute('disabled');
 
-    adFormFieldset.forEach((item) => {
-      item.removeAttribute('disabled');
-    });
-
-    mapFilterFieldset.forEach((item) => {
-      item.removeAttribute('disabled');
-    });
-
-    mapFilterSelects.forEach((item) => {
+    formFieldsetElements.forEach((item) => {
       item.removeAttribute('disabled');
     });
   }
 
 };
 
-export { pageDisabled };
+const mapFiltersDisabled = (isDisabled) => {
+  mapFiltersElement.classList.toggle('map__filters--disabled', isDisabled);
+
+  mapFilterElements.forEach((item) => {
+    if (isDisabled) {
+      item.setAttribute('disabled', isDisabled);
+    } else {
+      item.removeAttribute('disabled');
+    }
+  });
+
+  mapFeaturesElements.forEach((item) => {
+    if (isDisabled) {
+      item.setAttribute('disabled', isDisabled);
+    } else {
+      item.removeAttribute('disabled');
+    }
+  });
+
+};
+
+const pageDisabled = (isDisabled) => {
+  adFormDisabled(isDisabled);
+  mapFiltersDisabled(isDisabled);
+};
+
+export { pageDisabled, mapFiltersDisabled, adFormDisabled };

@@ -1,11 +1,10 @@
 import { resetMap } from './map.js';
-import { resetSlider } from './form-validation.js';
+import { resetSlider, pristine } from './form-validation.js';
+import { sendData } from './api.js';
 
 const adForm = document.querySelector('.ad-form');
 
 const mapFilters = document.querySelector('.map__filters');
-const mapFilterSelects = mapFilters.querySelectorAll('.map__features');
-const mapFilterFieldset = mapFilters.querySelectorAll('.map__filter');
 
 const submitButton = adForm.querySelector('.ad-form__submit');
 const resetButton = adForm.querySelector('.ad-form__reset');
@@ -46,26 +45,6 @@ function closeMessage () {
 }
 
 // ------------------------------------------------------------------------------------------------------------
-const filtersDisabled = (isDisabled) => {
-  mapFilters.classList.toggle('map__filters--disabled', isDisabled);
-
-  mapFilterFieldset.forEach((item) => {
-    if (!isDisabled) {
-      item.setAttribute('disabled', isDisabled);
-    } else {
-      item.removeAttribute('disabled');
-    }
-  });
-
-  mapFilterSelects.forEach((item) => {
-    if (!isDisabled) {
-      item.setAttribute('disabled', isDisabled);
-    } else {
-      item.removeAttribute('disabled');
-    }
-  });
-
-};
 
 const blockSubmitButton = () => {
   submitButton.setAttribute('disabled', true);
@@ -75,17 +54,43 @@ const unblockSubmitButton = () => {
   submitButton.removeAttribute('disabled');
 };
 
-
 const resetForm = () => {
   adForm.reset();
   resetSlider();
   mapFilters.reset();
   resetMap();
+  pristine.reset();
 };
 
-resetButton.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  resetForm();
-});
+const setFormReset = () => {
+  resetButton.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    resetForm();
 
-export { openMessage, resetForm, filtersDisabled, blockSubmitButton, unblockSubmitButton, createSuccess, createError };
+  });
+};
+
+const setFormSubmit = () => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    if(pristine.validate()) {
+      blockSubmitButton();
+      sendData(
+        () => {
+          unblockSubmitButton();
+          resetForm();
+          openMessage(createSuccess());
+        },
+        () => {
+          unblockSubmitButton();
+          openMessage(createError());
+        },
+        new FormData(evt.target),
+      );
+    }
+  });
+};
+
+
+export { resetForm, setFormReset, setFormSubmit };
