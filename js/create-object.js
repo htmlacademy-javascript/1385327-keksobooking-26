@@ -62,11 +62,11 @@ const createPopup = ({author, offer}) => {
   createElement('.popup__description', offer.description);
 
   const photosContainer = element.querySelector('.popup__photos');
-  const photoT = photosContainer.querySelector('.popup__photo');
+  const photoTemplate = photosContainer.querySelector('.popup__photo');
   if (offer.photos) {
     photosContainer.innerHTML = '';
     offer.photos.forEach((photo) => {
-      const item = photoT.cloneNode(true);
+      const item = photoTemplate.cloneNode(true);
       item.src = photo;
       photosContainer.append(item);
     });
