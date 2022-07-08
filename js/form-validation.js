@@ -97,9 +97,6 @@ const onPriceChange = () => {
   sliderElement.noUiSlider.set(Number(priceElement.value));
 };
 
-// typeElement.addEventListener('change', onTypeChange);
-// priceElement.addEventListener('change', onPriceChange);
-
 sliderElement.noUiSlider.on('slide', () => {
   setForType();
   priceElement.value = sliderElement.noUiSlider.get();
@@ -109,16 +106,16 @@ sliderElement.noUiSlider.on('slide', () => {
 const resetSlider = () => {
   sliderElement.noUiSlider.reset();
 };
-// ------------------------------------------------------------------------------------------------------------
+
 const validateRoomsAndGuests = () => (Number(guestsElement.value) <= Number(roomsElement.value) && Number(roomsElement.value) !== 100 && Number(guestsElement.value) !== 0) || (Number(roomsElement.value) === 100 && Number(guestsElement.value) === 0);
 
 const getErrorRoomsMessage = () => {
   if (Number(roomsElement.value) < Number(guestsElement.value)) {
     return 'Количество гостей не должно превышать количество комнат';
   }else if(Number(roomsElement.value) !== 100 && Number(guestsElement.value) === 0) {
-    return 'не для гостей выбирайте 100 комнат';
+    return 'выберите 100 комнат';
   }else if(Number(roomsElement.value) === 100 && Number(guestsElement.value) !== 0) {
-    return '100 комнат это не для гостей';
+    return '100 комнат не для гостей';
   }
 };
 
@@ -127,22 +124,18 @@ pristine.addValidator(guestsElement, validateRoomsAndGuests, getErrorRoomsMessag
 const onRoomsChange = () => {
   pristine.validate(guestsElement);
 };
-// roomsElement.addEventListener('change',  onRoomsChange);
 
 const onGuestsChange = () => {
   pristine.validate(guestsElement);
 };
-// guestsElement.addEventListener('change', onGuestsChange);
-// ------------------------------------------------------------------------------------------------------------
+
 const onCheckinChange = () => {
   checkoutElement.value = checkinElement.value;
 };
 const onCheckoutChange = () => {
   checkinElement.value = checkoutElement.value;
 };
-// checkinElement.addEventListener('change', onCheckinChange);
-// checkoutElement.addEventListener('change', onCheckoutChange);
-// ------------------------------------------------------------------------------------------------------------
+
 const validateForm = () => {
 
   typeElement.addEventListener('change', onTypeChange);

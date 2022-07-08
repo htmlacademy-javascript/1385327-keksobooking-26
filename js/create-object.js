@@ -5,6 +5,12 @@ const template = document.querySelector('#card').content.querySelector('.popup')
 const createPopup = ({author, offer}) => {
   const element = template.cloneNode(true);
 
+  const offerType = element.querySelector('.popup__type');
+  const features = element.querySelector('.popup__features');
+  const photosContainer = element.querySelector('.popup__photos');
+  const photoTemplate = photosContainer.querySelector('.popup__photo');
+  const authorAvatar = element.querySelector('.popup__avatar');
+
   const createElement = (selector, content) => {
     if (content) {
       setElement(element, selector, content);
@@ -22,17 +28,6 @@ const createPopup = ({author, offer}) => {
     hideElement(element.querySelector('.popup__text--price'));
   }
 
-  const offerType = element.querySelector('.popup__type');
-  offerType.textContent = '';
-  switch(offer.type) {
-    case 'palace': offerType.textContent='Дворец'; break;
-    case 'float': offerType.textContent='Квартира'; break;
-    case 'house': offerType.textContent='Дом'; break;
-    case 'bungalow': offerType.textContent='Бунгало'; break;
-    case 'hotel': offerType.textContent='Отель'; break;
-    case undefined : hideElement(element.querySelector('.popup__type'));
-  }
-
   createElement('.popup__text--capacity', `${offer.rooms} ${setEndingWord(offer.rooms, ['комната', 'комнаты', 'комнат'])} для ${offer.guests} ${setEndingWord(offer.guests, ['гостя', 'гостей', 'гостей'])} `);
   if (!offer.rooms || !offer.guests) {
     hideElement(element.querySelector('.popup__text--capacity'));
@@ -43,7 +38,17 @@ const createPopup = ({author, offer}) => {
     hideElement(element.querySelector('.popup__text--time'));
   }
 
-  const features = element.querySelector('.popup__features');
+  createElement('.popup__description', offer.description);
+
+  switch(offer.type) {
+    case 'palace': offerType.textContent='Дворец'; break;
+    case 'float': offerType.textContent='Квартира'; break;
+    case 'house': offerType.textContent='Дом'; break;
+    case 'bungalow': offerType.textContent='Бунгало'; break;
+    case 'hotel': offerType.textContent='Отель'; break;
+    case undefined : hideElement(element.querySelector('.popup__type'));
+  }
+
   if (offer.features) {
     const featuresList = features.querySelectorAll('.popup__feature');
 
@@ -59,10 +64,6 @@ const createPopup = ({author, offer}) => {
     hideElement(element.querySelector('.popup__features'));
   }
 
-  createElement('.popup__description', offer.description);
-
-  const photosContainer = element.querySelector('.popup__photos');
-  const photoTemplate = photosContainer.querySelector('.popup__photo');
   if (offer.photos) {
     photosContainer.innerHTML = '';
     offer.photos.forEach((photo) => {
@@ -74,7 +75,6 @@ const createPopup = ({author, offer}) => {
     hideElement(element.querySelector('.popup__photos'));
   }
 
-  const authorAvatar = element.querySelector('.popup__avatar');
   if (author.avatar) {
     authorAvatar.src = `${author.avatar}`;
   } else {

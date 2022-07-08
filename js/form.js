@@ -1,5 +1,6 @@
 import { resetMap } from './map.js';
 import { resetSlider, pristine } from './form-validation.js';
+import { resetImages } from './form-photo.js';
 import { sendData } from './api.js';
 
 const adForm = document.querySelector('.ad-form');
@@ -57,9 +58,11 @@ const unblockSubmitButton = () => {
 const resetForm = () => {
   adForm.reset();
   resetSlider();
+  resetImages();
+  pristine.reset();
+
   mapFilters.reset();
   resetMap();
-  pristine.reset();
 };
 
 const setFormReset = () => {
