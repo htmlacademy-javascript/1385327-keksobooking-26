@@ -3,12 +3,12 @@ import { resetSlider, pristine } from './form-validation.js';
 import { resetImages } from './form-photo.js';
 import { sendData } from './api.js';
 
-const adForm = document.querySelector('.ad-form');
+const adFormElement = document.querySelector('.ad-form');
 
-const mapFilters = document.querySelector('.map__filters');
+const mapFiltersElement = document.querySelector('.map__filters');
 
-const submitButton = adForm.querySelector('.ad-form__submit');
-const resetButton = adForm.querySelector('.ad-form__reset');
+const submitButton = adFormElement.querySelector('.ad-form__submit');
+const resetButton = adFormElement.querySelector('.ad-form__reset');
 
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
@@ -45,8 +45,6 @@ function closeMessage () {
   document.removeEventListener('click', onMessageClick);
 }
 
-// ------------------------------------------------------------------------------------------------------------
-
 const blockSubmitButton = () => {
   submitButton.setAttribute('disabled', true);
 };
@@ -56,12 +54,12 @@ const unblockSubmitButton = () => {
 };
 
 const resetForm = () => {
-  adForm.reset();
+  adFormElement.reset();
   resetSlider();
   resetImages();
   pristine.reset();
 
-  mapFilters.reset();
+  mapFiltersElement.reset();
   resetMap();
 };
 
@@ -74,7 +72,7 @@ const setFormReset = () => {
 };
 
 const setFormSubmit = () => {
-  adForm.addEventListener('submit', (evt) => {
+  adFormElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     if(pristine.validate()) {
@@ -94,6 +92,5 @@ const setFormSubmit = () => {
     }
   });
 };
-
 
 export { resetForm, setFormReset, setFormSubmit };
