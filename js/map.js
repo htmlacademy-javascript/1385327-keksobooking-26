@@ -1,4 +1,4 @@
-import { pageDisabled, mapFiltersDisabled,  } from './page-switcher.js'; // adFormDisabled
+import { pageDisabled, mapFiltersDisabled,  } from './page-switcher.js';
 import { createPopup } from './create-object.js';
 import { showError, debounce } from './util.js';
 import { getData } from './api.js';
@@ -84,7 +84,6 @@ const resetMarkerGroup = () => {
   markerGroup.closePopup();
 };
 
-//----------------------------------------------------------------
 const createObject = (data) => {
   data.forEach(({author, offer, location}) => {
     createNearbyMarker({author, offer, location});
@@ -101,8 +100,6 @@ const getNearbyObject = (data) => {
   }, RERENDER_DELAY));
 };
 
-//----------------------------------------------------------------
-
 const resetMap = () => {
   map.setView({
     lat: BasicMapSetup.lat,
@@ -113,7 +110,7 @@ const resetMap = () => {
   resetMarkerGroup();
   createObject(copyData.slice(0, NEARBY_OBJECT));
 };
-//----------------------------------------------------------------
+
 const loadMap = () => {
   map.on('load', () => {
     pageDisabled(false);

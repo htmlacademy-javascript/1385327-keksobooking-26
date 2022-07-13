@@ -1,4 +1,4 @@
-import {setElement, hideElement, setEndingWord} from './util.js';
+import {hideElement, setEndingWord} from './util.js';
 
 const template = document.querySelector('#card').content.querySelector('.popup');
 
@@ -13,9 +13,10 @@ const createPopup = ({author, offer}) => {
 
   const createElement = (selector, content) => {
     if (content) {
-      setElement(element, selector, content);
+      element.querySelector(selector).textContent = content;
     } else {
-      hideElement(element.querySelector(selector));
+      //hideElement(element.querySelector(selector));
+      element.querySelector(selector).classList.add('hidden');
     }
   };
 
@@ -46,7 +47,7 @@ const createPopup = ({author, offer}) => {
     case 'house': offerType.textContent='Дом'; break;
     case 'bungalow': offerType.textContent='Бунгало'; break;
     case 'hotel': offerType.textContent='Отель'; break;
-    case undefined : hideElement(element.querySelector('.popup__type'));
+    default : hideElement(element.querySelector('.popup__type'));
   }
 
   if (offer.features) {

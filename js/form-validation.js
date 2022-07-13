@@ -137,7 +137,6 @@ const onCheckoutChange = () => {
 };
 
 const validateForm = () => {
-
   typeElement.addEventListener('change', onTypeChange);
   priceElement.addEventListener('change', onPriceChange);
   roomsElement.addEventListener('change', onRoomsChange);
