@@ -7,8 +7,8 @@ const adFormElement = document.querySelector('.ad-form');
 
 const mapFiltersElement = document.querySelector('.map__filters');
 
-const submitButton = adFormElement.querySelector('.ad-form__submit');
-const resetButton = adFormElement.querySelector('.ad-form__reset');
+const submitButtonElement = adFormElement.querySelector('.ad-form__submit');
+const resetButtonElement = adFormElement.querySelector('.ad-form__reset');
 
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
@@ -26,9 +26,10 @@ const createError = () => {
 const onMessageClick = () => {
   closeMessage();
 };
+
 const onMessageEscKeydown = (evt) => {
   if (evt.key === 'Escape') {
-    //evt.preventDefault();
+    evt.preventDefault();
     closeMessage();
   }
 };
@@ -46,11 +47,11 @@ function closeMessage () {
 }
 
 const blockSubmitButton = () => {
-  submitButton.setAttribute('disabled', true);
+  submitButtonElement.setAttribute('disabled', true);
 };
 
 const unblockSubmitButton = () => {
-  submitButton.removeAttribute('disabled');
+  submitButtonElement.removeAttribute('disabled');
 };
 
 const resetForm = () => {
@@ -64,10 +65,9 @@ const resetForm = () => {
 };
 
 const setFormReset = () => {
-  resetButton.addEventListener('click', (evt) => {
+  resetButtonElement.addEventListener('click', (evt) => {
     evt.preventDefault();
     resetForm();
-
   });
 };
 

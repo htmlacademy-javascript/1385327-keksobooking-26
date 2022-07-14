@@ -1,10 +1,10 @@
 
-const setElement = (popup, classElement, content) => {
-  popup.querySelector(classElement).textContent = content;
-};
-
-const hideElement = (element) => {
-  element.classList.add('hidden');
+const createElement = (element, selector, content) => {
+  if (content) {
+    element.querySelector(selector).textContent = content;
+  } else {
+    element.querySelector(selector).remove();
+  }
 };
 
 const setEndingWord = (value, words) => {
@@ -68,10 +68,4 @@ const debounce = (callback, timeoutDelay) => {
   };
 };
 
-export {
-  setElement,
-  hideElement,
-  setEndingWord,
-  showError,
-  debounce
-};
+export { createElement, setEndingWord, showError, debounce };

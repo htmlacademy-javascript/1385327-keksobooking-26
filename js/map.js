@@ -1,5 +1,5 @@
-import { pageDisabled, mapFiltersDisabled,  } from './page-switcher.js';
-import { createPopup } from './create-object.js';
+import { setPageSwitcher, setMapFiltersSwitcher,  } from './page-switcher.js';
+import { createPopup } from './create-popup.js';
 import { showError, debounce } from './util.js';
 import { getData } from './api.js';
 import { compareObject } from './map-filters.js';
@@ -12,7 +12,7 @@ const copyData =[];
 
 const mapFiltersElement = document.querySelector('.map__filters');
 
-const BasicMapSetup = { // императорский Дворец так как попадает в диапазон в отличии от центра
+const BasicMapSetup = {
   lat: 35.68563,
   lng: 139.75276,
   scale: 12,
@@ -91,7 +91,7 @@ const createObject = (data) => {
 };
 
 const getNearbyObject = (data) => {
-  mapFiltersDisabled(false);
+  setMapFiltersSwitcher(false);
   createObject(data.slice(0, NEARBY_OBJECT));
 
   mapFiltersElement.addEventListener('change', debounce(() => {
@@ -113,14 +113,14 @@ const resetMap = () => {
 
 const loadMap = () => {
   map.on('load', () => {
-    pageDisabled(false);
+    setPageSwitcher(false);
     getData(
       (data) => {
         copyData.push(...data);
         getNearbyObject(copyData);
       },
       () => {
-        mapFiltersDisabled(true);
+        setMapFiltersSwitcher(true);
         showError('Cервер временно недоступен, попробуйте перезагрузить страницу или обратиться позже');
       }
     );
