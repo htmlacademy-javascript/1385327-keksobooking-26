@@ -7,7 +7,7 @@ const mapFiltersElement = document.querySelector('.map__filters');
 const mapFeaturesElements = mapFiltersElement.querySelectorAll('.map__features');
 const mapFilterElements = mapFiltersElement.querySelectorAll('.map__filter');
 
-const adFormDisabled = (isDisabled) => {
+const setAdFormSwitcher = (isDisabled) => {
   adFormElement.classList.toggle('ad-form--disabled', isDisabled);
 
   if (isDisabled){
@@ -26,7 +26,7 @@ const adFormDisabled = (isDisabled) => {
 
 };
 
-const mapFiltersDisabled = (isDisabled) => {
+const setMapFiltersSwitcher = (isDisabled) => {
   mapFiltersElement.classList.toggle('map__filters--disabled', isDisabled);
 
   mapFilterElements.forEach((item) => {
@@ -47,9 +47,9 @@ const mapFiltersDisabled = (isDisabled) => {
 
 };
 
-const pageDisabled = (isDisabled) => {
-  adFormDisabled(isDisabled);
-  mapFiltersDisabled(isDisabled);
+const setPageSwitcher = (isDisabled) => {
+  setAdFormSwitcher(isDisabled);
+  setMapFiltersSwitcher(isDisabled);
 };
 
-export { pageDisabled, mapFiltersDisabled, adFormDisabled };
+export { setPageSwitcher, setMapFiltersSwitcher, setAdFormSwitcher };

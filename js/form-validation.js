@@ -1,6 +1,5 @@
 
 const adFormElement = document.querySelector('.ad-form');
-// const titleElement = adFormElement.querySelector('#title');
 const addressElement = adFormElement.querySelector('#address');
 const typeElement = adFormElement.querySelector('#type');
 const priceElement = adFormElement.querySelector('#price');
@@ -10,10 +9,6 @@ const guestsElement = adFormElement.querySelector('#capacity');
 const checkinElement = adFormElement.querySelector('#timein');
 const checkoutElement = adFormElement.querySelector('#timeout');
 
-// const TITLE_SIZE = {
-//   min: 30,
-//   max: 100
-// };
 const TOKYO_DOWNTOWN = {
   lat: 35.68563,
   lng: 139.75276
@@ -36,25 +31,15 @@ const pristine =  new Pristine(adFormElement, {
   errorTextClass: 'ad-form__error-text'
 });
 
-// const validateTitle =  (value) => value.length >= TITLE_SIZE.min && value.length <= TITLE_SIZE.max;
-// const getErrorTitleMessage = (value) => {
-//   if (value.length <= TITLE_SIZE.min) {
-//     return `Минимальная длина ${TITLE_SIZE.min} символов`;
-//   } else if (value.length >= TITLE_SIZE.max) {
-//     return `Максимальная длина ${TITLE_SIZE.max} символов`;
-//   }
-// };
-// pristine.addValidator(titleElement, validateTitle, getErrorTitleMessage);
-
-addressElement.value = `${TOKYO_DOWNTOWN.lat} ${TOKYO_DOWNTOWN.lng}`; // Координаты центра Токио по умолчанию (и чтоб не ругался)
+addressElement.value = `${TOKYO_DOWNTOWN.lat} ${TOKYO_DOWNTOWN.lng}`;
 
 const setForType = () => {
   switch (typeElement.value) {
-    case 'bungalow' : {priceElement.placeholder = typePrice.bungalow; break;} // 0
-    case 'flat' : {priceElement.placeholder = typePrice.flat; break;} // 1000
-    case 'hotel' : {priceElement.placeholder = typePrice.hotel; break;} // 3000
-    case 'house' : {priceElement.placeholder = typePrice.house; break;} // 5000
-    case 'palace' : {priceElement.placeholder = typePrice.palace;} // 10000
+    case 'bungalow' : {priceElement.placeholder = typePrice.bungalow; break;}
+    case 'flat' : {priceElement.placeholder = typePrice.flat; break;}
+    case 'hotel' : {priceElement.placeholder = typePrice.hotel; break;}
+    case 'house' : {priceElement.placeholder = typePrice.house; break;}
+    case 'palace' : {priceElement.placeholder = typePrice.palace;}
   }
 };
 
